@@ -30,8 +30,8 @@ public class Enrollment implements Serializable {
     private Course course;
 
     private Boolean confirmed;
-
+    @Enumerated(EnumType.STRING)
     private EnrollementType type;
 
-    private int group;
+    private int groupNumber;
 }
