@@ -1,8 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { User } from './model/user';
-import { UserService } from './service/user.service';
-import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,21 +7,6 @@ import { catchError } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'frontend';
-
-  userService = inject(UserService);
-  users = signal<Array<User>>([]);
-
-  ngOnInit(): void {
-    this.userService.getUsers()
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          throw err;
-        })
-      ).subscribe((users) => {
-        this.users.set(users);
-      });
-  }
 }
