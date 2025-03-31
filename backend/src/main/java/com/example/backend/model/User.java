@@ -5,6 +5,11 @@ import lombok.*;
 
 import java.io.Serializable;
 
+enum AccountType
+{
+    ADMIN, TEACHER, STUDENT
+}
+
 @Getter
 @Setter
 @Builder
@@ -16,9 +21,12 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column (nullable = false, updatable = false)
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
-    @Column (nullable = false, updatable = false)
-    private String indexCode;
+
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
 }
