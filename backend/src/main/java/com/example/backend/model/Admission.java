@@ -22,6 +22,10 @@ public class Admission {
     @JoinColumn(name="course_id", nullable = false)
     private Course course;
 
+    @ManyToOne
+    @JoinColumn(name="homework_id", nullable = false)
+    private Homework homework;
+
     private String filepath;
     private long admissonDate;
     private String studentComment;
