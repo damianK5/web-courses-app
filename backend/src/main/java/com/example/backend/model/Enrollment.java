@@ -5,11 +5,6 @@ import lombok.*;
 
 import java.io.Serializable;
 
-enum EnrollementType
-{
-    MAIN_TEACHER, TEACHER, STUDENT
-}
-
 @Getter
 @Setter
 @Builder
@@ -31,7 +26,7 @@ public class Enrollment implements Serializable {
 
     private Boolean confirmed;
     @Enumerated(EnumType.STRING)
-    private EnrollementType type;
+    private EnrollmentType type;
 
     private int groupNumber;
 }

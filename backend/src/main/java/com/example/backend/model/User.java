@@ -10,11 +10,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-enum AccountType
-{
-    ADMIN, TEACHER, STUDENT
-}
-
 @Getter
 @Setter
 @Builder
