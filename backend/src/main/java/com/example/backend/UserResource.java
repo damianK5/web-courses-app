@@ -29,11 +29,13 @@ public class UserResource {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User newUser = userService.addUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-    }
+    // Register is in auth/AuthenticationController
+
+//    @PostMapping("/add")
+//    public ResponseEntity<User> addUser(@RequestBody User user) {
+//        User newUser = userService.addUser(user);
+//        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {

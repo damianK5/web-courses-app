@@ -24,8 +24,7 @@ public class AuthenticationService {
                 .lastName(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                // TODO account type based on selected value in register form
-                .accountType(AccountType.STUDENT)
+                .accountType(AccountType.STUDENT) // TODO account type based on selected value in register form
                 .build();
         userRepo.save(user);
         var jwtToken = jwtService.generateToken(user);
