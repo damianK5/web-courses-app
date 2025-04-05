@@ -13,12 +13,11 @@ public class CourseService {
     private final CourseRepo courseRepo;
 
     @Autowired
-    public CourseService(CourseRepo courseRepo)
-    {
+    public CourseService(CourseRepo courseRepo) {
         this.courseRepo = courseRepo;
     }
 
-    public Course addCoure(Course course) {
+    public Course addCourse(Course course) {
         return courseRepo.save(course);
     }
 
