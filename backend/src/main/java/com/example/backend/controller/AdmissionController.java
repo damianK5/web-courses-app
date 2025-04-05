@@ -30,14 +30,14 @@ public class AdmissionController {
         return new ResponseEntity<>(admission, HttpStatus.OK);
     }
 
-    @GetMapping("find/homework/{id}")
+    @GetMapping("/find/homework/{id}")
     public ResponseEntity<List<Admission>> getAdmissionsByHomework(@PathVariable Long id)
     {
         List<Admission> admissions = admissionService.findAdmissionsByHomework(id);
         return new ResponseEntity<>(admissions, HttpStatus.OK);
     }
 
-    @GetMapping("find/user/{id}")
+    @GetMapping("/find/user/{id}")
     public ResponseEntity<List<Admission>> getAdmissionsByUser(@PathVariable Long id)
     {
         List<Admission> admissions = admissionService.findAdmissionsByUser(id);

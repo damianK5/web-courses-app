@@ -29,14 +29,14 @@ public class EnrollmentController {
         return new ResponseEntity<>(enrollment, HttpStatus.OK);
     }
 
-    @GetMapping("find/user/{id}")
+    @GetMapping("/find/user/{id}")
     public ResponseEntity<List<Enrollment>> getEnrollmentsByUser(@PathVariable Long id)
     {
         List<Enrollment> enrollments = enrollmentService.findEnrollmentsByUser(id);
         return new ResponseEntity<>(enrollments, HttpStatus.OK);
     }
 
-    @GetMapping("find/course/id")
+    @GetMapping("/find/course/id")
     public ResponseEntity<List<Enrollment>> getEnrollmentsByCourse(@PathVariable Long id)
     {
         List<Enrollment> enrollments = enrollmentService.findEnrollmentsByCourse(id);
