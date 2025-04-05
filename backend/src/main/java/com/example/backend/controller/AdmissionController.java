@@ -4,6 +4,7 @@ import com.example.backend.model.Admission;
 import com.example.backend.service.AdmissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,20 @@ public class AdmissionController {
     public ResponseEntity<Admission> getAdmissionById(@PathVariable Long id) {
         Admission admission = admissionService.findAdmissionById(id);
         return new ResponseEntity<>(admission, HttpStatus.OK);
+    }
+
+    @GetMapping("find/homework/{id}")
+    public ResponseEntity<List<Admission>> getAdmissionsByHomework(@PathVariable Long id)
+    {
+        List<Admission> admissions = admissionService.findAdmissionsByHomework(id);
+        return new ResponseEntity<>(admissions, HttpStatus.OK);
+    }
+
+    @GetMapping("find/user/{id}")
+    public ResponseEntity<List<Admission>> getAdmissionsByUser(@PathVariable Long id)
+    {
+        List<Admission> admissions = admissionService.findAdmissionsByUser(id);
+        return new ResponseEntity<>(admissions, HttpStatus.OK);
     }
 
     @PostMapping("/add")

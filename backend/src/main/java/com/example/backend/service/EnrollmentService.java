@@ -23,6 +23,8 @@ public class EnrollmentService {
     public List<Enrollment> findAllEnrollments() {
         return enrollmentRepo.findAll();
     }
+    public List<Enrollment> findEnrollmentsByUser(long id) {return enrollmentRepo.getEnrollmentsByUser(id);}
+    public List<Enrollment> findEnrollmentsByCourse(long id) {return enrollmentRepo.getEnrollmentsByCourse(id);}
 
     public Enrollment updateEnrollment(Enrollment enrollment) {
         return enrollmentRepo.save(enrollment);

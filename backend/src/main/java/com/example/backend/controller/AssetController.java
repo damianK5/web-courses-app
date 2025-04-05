@@ -29,6 +29,13 @@ public class AssetController {
         return new ResponseEntity<>(asset, HttpStatus.OK);
     }
 
+    @GetMapping("/find/course/{id}")
+    public ResponseEntity<List<Asset>> getAssetsByCourse(@PathVariable Long id)
+    {
+        List<Asset> assets = assetService.findAssetByCourse(id);
+        return new ResponseEntity<>(assets, HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Asset> addAsset(@RequestBody Asset asset) {
         Asset newAsset = assetService.addAsset(asset);

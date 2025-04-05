@@ -23,6 +23,7 @@ public class AssetService {
     public List<Asset> findAllAssets() {
         return assetRepo.findAll();
     }
+    public List<Asset> findAssetByCourse(long id) {return assetRepo.getAssetsByCourse(id);}
 
     public Asset updateAsset(Asset asset) {
         return assetRepo.save(asset);

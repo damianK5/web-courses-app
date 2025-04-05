@@ -24,6 +24,8 @@ public class AdmissionService {
         return admissionRepo.findAll();
     }
 
+    public List<Admission> findAdmissionsByHomework(long id) {return admissionRepo.getAdmissionsByHomework(id);}
+    public List<Admission> findAdmissionsByUser(long id) {return  admissionRepo.getAdmissionsByUser(id);}
     public Admission updateAdmission(Admission admission) {
         return admissionRepo.save(admission);
     }
