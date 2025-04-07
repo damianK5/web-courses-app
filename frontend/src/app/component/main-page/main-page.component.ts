@@ -10,6 +10,7 @@ import { catchError } from 'rxjs';
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent implements OnInit {
+  // this was for testing
   userService = inject(UserService);
   users = signal<Array<User>>([]);
 

@@ -1,16 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginComponent } from "../login/login.component";
 
 @Component({
   selector: 'app-login-page',
-  imports: [],
+  imports: [LoginComponent],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
-  router = inject(Router);
-
-  login() {
-    this.router.navigateByUrl('main');
-  }
 }
