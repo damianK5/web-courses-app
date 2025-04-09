@@ -31,7 +31,7 @@ export class LoginComponent {
     this.auth.login(this.request).subscribe({
       next: (res) => {
         console.log('Received response: ' + res.token);
-        this.router.navigateByUrl('main');
+        this.router.navigate(['/']);
       }, error: (err) => {
         console.log('Error response: ' + err);
       }
