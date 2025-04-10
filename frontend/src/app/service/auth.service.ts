@@ -5,6 +5,8 @@ import { LoginRequest } from '../model/login-request';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { LoginResponse } from '../model/login-response';
 import { Router } from '@angular/router';
+import { DecodedToken } from '../model/token';
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,27 @@ export class AuthService {
   getToken() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser')!);
     return currentUser?.token;
+  }
+
+  decodeToken(token: string): DecodedToken {
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      throw new Error('Invalid token');
+    }
+  }
+
+  getCurrentUserRoles(): string[] {
+    const token = localStorage.getItem('token'); // Or your storage method
+    if (!token) return [];
+    return this.decodeToken(token).roles;
+  }
+
+  getCurrentUserEmail(): string {
+    const token = localStorage.getItem('token');
+    if (!token) return '';
+    return this.decodeToken(token).sub;
   }
 
   public get currentUserValue() {

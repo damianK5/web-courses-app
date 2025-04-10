@@ -10,8 +10,19 @@ import { AuthService } from '../../service/auth.service';
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
-export class MainPageComponent {
+export class MainPageComponent implements OnInit {
   authService = inject(AuthService);
+  email: string = '';
+  roles: string[] = [];
+
+  ngOnInit(): void {
+    const token = localStorage.getItem('currentUser');
+    if (token) {
+      const decoded = this.authService.decodeToken(token);
+      this.email = decoded.sub;
+      this.roles = decoded.roles;
+    }
+  }
 
   logout() {
     this.authService.logout().subscribe();
