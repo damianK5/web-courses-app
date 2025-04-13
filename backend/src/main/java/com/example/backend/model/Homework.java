@@ -26,4 +26,5 @@ public class Homework implements Serializable {
     private long deadline;
     private int maxGrade;
     private boolean requireAdmission;
+    private String filepath;
 }
