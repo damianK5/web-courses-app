@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
@@ -23,12 +24,13 @@ public class FileStorageService {
             throw new NullPointerException("fileToSave is null");
         }
 
-        var targetFile = new File(STORAGE_DIR + path + sep + fileToSave.getOriginalFilename());
+        var targetPath = Paths.get(STORAGE_DIR, path).normalize();
+        var targetFile = new File(targetPath + sep + fileToSave.getOriginalFilename());
         if(!Objects.equals(targetFile.getParent(), STORAGE_DIR + path))
         {
             throw new SecurityException("Unsupported filename");
         }
-
+        Files.createDirectories(targetPath);
         Files.copy(fileToSave.getInputStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
