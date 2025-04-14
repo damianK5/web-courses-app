@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
@@ -21,8 +22,19 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/files")
-public class FileManagerController {
 
+//TODO
+//Add File list dispalys methods
+//Add path.normalize in the service for security
+//add targetFile.getParentFile().mkdirs() to service to create needed directories
+// Potentially change the whole user for just ID and fetch it with UserService?
+//Potentially change booleans into HTTP response
+//change Logger log into Lombok's @log
+//Use Path API for directory creation
+//set up max size for download and upload
+
+public class FileManagerController {
+private final String sep = File.separator;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -45,33 +57,33 @@ public class FileManagerController {
     @PostMapping("/{courseid}/asset/upload")
     public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = "/" + courseid.toString() + "/asset/";
+        String path = courseid.toString() + sep + "asset";
         return uploadFile(file, path);
 
     }
-
+    //Analogicznie, tylko ze dla wrzucania zadan domowycg
     @PostMapping("/{courseid}/homework/upload")
     public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = "/" + courseid.toString() + "/homework/";
+        String path = courseid.toString() + sep +"homework";
         return uploadFile(file, path);
     }
 
     @PostMapping("/{courseid}/{homeworkid}/upload")
     public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user, @RequestParam("file") MultipartFile file)
     {
-        String path = "/" + courseid.toString() + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + "/" + homeworkid.toString() + "/";
+        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
         return uploadFile(file, path);
     }
 
 
 
 
-    @GetMapping("/download")
-    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String filename)
+//Ogolna metoda do pobierania pliku
+    public ResponseEntity<Resource> downloadFile(String filename, String path)
     {
         try {
-            var fileToDownload = fileStorageService.getDownloadFile(filename);
+            var fileToDownload = fileStorageService.getDownloadFile(filename, path);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"" + filename + "\"")
                     .contentLength(fileToDownload.length())
@@ -81,6 +93,27 @@ public class FileManagerController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/{courseid}/asset/download")
+    public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = courseid.toString() + sep + "asset";
+        return downloadFile(filename, path);
+    }
+
+    @GetMapping("/{courseid}/homework/download")
+    public ResponseEntity<Resource> downloadHomework(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = courseid.toString() + sep +"homework";
+        return downloadFile(filename, path);
+    }
+
+    @GetMapping("/{courseid}/{homeworkid}/download")
+    public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user, @RequestParam("filename") String filename)
+    {
+        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
+        return downloadFile(filename, path);
+    }
+
 
 
 }

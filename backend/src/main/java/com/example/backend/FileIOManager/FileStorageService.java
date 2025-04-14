@@ -13,8 +13,9 @@ import java.util.Objects;
 @Service
 public class FileStorageService {
 
-    private static final String ARCHIVE_DIR = "/archive/";
-    private static final String STORAGE_DIR = "/storage/";
+    private static final String sep = File.separator;
+    private static final String ARCHIVE_DIR = "archive" + sep;
+    private static final String STORAGE_DIR = "storage" + sep;
     public void saveFile(MultipartFile fileToSave, String path) throws IOException
     {
         if(fileToSave == null)
@@ -22,7 +23,7 @@ public class FileStorageService {
             throw new NullPointerException("fileToSave is null");
         }
 
-        var targetFile = new File(STORAGE_DIR + path + File.separator + fileToSave.getOriginalFilename());
+        var targetFile = new File(STORAGE_DIR + path + sep + fileToSave.getOriginalFilename());
         if(!Objects.equals(targetFile.getParent(), STORAGE_DIR + path))
         {
             throw new SecurityException("Unsupported filename");
@@ -31,15 +32,15 @@ public class FileStorageService {
         Files.copy(fileToSave.getInputStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public File getDownloadFile(String filename) throws IOException
+    public File getDownloadFile(String filename, String path) throws IOException
     {
         if(filename == null)
         {
             throw new NullPointerException("filename is null");
         }
-        var fileToDownload = new File(STORAGE_DIR + File.separator + filename);
+        var fileToDownload = new File(STORAGE_DIR + path + sep + filename);
 
-        if(!Objects.equals(fileToDownload.getParent(), STORAGE_DIR))
+        if(!Objects.equals(fileToDownload.getParent(), STORAGE_DIR + path))
         {
             throw new SecurityException("Unsupported filename");
         }
