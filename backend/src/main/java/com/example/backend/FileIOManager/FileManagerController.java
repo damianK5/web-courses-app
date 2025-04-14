@@ -1,6 +1,7 @@
 package com.example.backend.FileIOManager;
 
 import com.example.backend.model.Homework;
+import com.example.backend.model.User;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -44,10 +45,25 @@ public class FileManagerController {
     @PostMapping("/{courseid}/asset/upload")
     public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = "/" + courseid.toString();
+        String path = "/" + courseid.toString() + "/asset/";
         return uploadFile(file, path);
 
     }
+
+    @PostMapping("/{courseid}/homework/upload")
+    public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
+    {
+        String path = "/" + courseid.toString() + "/homework/";
+        return uploadFile(file, path);
+    }
+
+    @PostMapping("/{courseid}/{homeworkid}/upload")
+    public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user, @RequestParam("file") MultipartFile file)
+    {
+        String path = "/" + courseid.toString() + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + "/" + homeworkid.toString() + "/";
+        return uploadFile(file, path);
+    }
+
 
 
 
