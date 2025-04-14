@@ -16,7 +16,7 @@ public class FileStorageService {
 
     private static final String sep = File.separator;
     private static final String ARCHIVE_DIR = "archive" + sep;
-    private static final String STORAGE_DIR = "storage" + sep;
+    public static final String STORAGE_DIR = "storage" + sep;
     public void saveFile(MultipartFile fileToSave, String path) throws IOException
     {
         if(fileToSave == null)

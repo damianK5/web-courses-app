@@ -11,14 +11,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/files")
@@ -114,6 +121,46 @@ private final String sep = File.separator;
         return downloadFile(filename, path);
     }
 
+    @GetMapping("/{courseid}/asset/list")
+    public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
+        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "asset").toString();
+
+        return generateFileList( path);
+    }
+    @GetMapping("/{courseid}/homework/list")
+    public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
+    {
+        String path = courseid.toString() + sep +"homework";
+        return generateFileList( path);
+    }
+    @GetMapping("/{courseid}/{homeworkid}/list")
+    public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user)
+    {
+        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
+        return generateFileList( path);
+    }
+
+
+
+    private ResponseEntity<?> generateFileList( String path)
+    {
+        if (!Files.exists(Paths.get(path))) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Directory not found!");
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(path))) {
+            List<String> files = StreamSupport.stream(stream.spliterator(), false)
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .toList();
+
+            return ResponseEntity.ok(files);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to list files: " + e.getMessage());
+        }
+    }
 
 
 }
