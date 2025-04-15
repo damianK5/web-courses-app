@@ -2,6 +2,7 @@ package com.example.backend.FileIOManager;
 
 import com.example.backend.model.Homework;
 import com.example.backend.model.User;
+import com.example.backend.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -31,21 +32,14 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/files")
 
 //TODO
-//Add File list dispalys methods
-//Add path.normalize in the service for security
-//add targetFile.getParentFile().mkdirs() to service to create needed directories
 // Potentially change the whole user for just ID and fetch it with UserService?
-//Potentially change booleans into HTTP response
-//change Logger log into Lombok's @log
-//Use Path API for directory creation
-//set up max size for download and upload
-
+@Log
 public class FileManagerController {
 private final String sep = File.separator;
 
     @Autowired
     private FileStorageService fileStorageService;
-    private static final Logger log = Logger.getLogger(FileManagerController.class.getName());
+    private UserService userService;
 
     //Ogolna metoda do uploadu, mozna jej uzyc do samego przesylu a w tych z mappingiem zrobic rozne typy np wysylanie assety, oddawanie zadania itp
 
@@ -64,7 +58,7 @@ private final String sep = File.separator;
     @PostMapping("/{courseid}/asset/upload")
     public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = courseid.toString() + sep + "asset";
+        String path = Paths.get(courseid.toString(), "asset").toString();
         return uploadFile(file, path);
 
     }
@@ -72,14 +66,15 @@ private final String sep = File.separator;
     @PostMapping("/{courseid}/homework/upload")
     public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = courseid.toString() + sep +"homework";
+        String path = Paths.get(courseid.toString(), "homework").toString();
         return uploadFile(file, path);
     }
 
     @PostMapping("/{courseid}/{homeworkid}/upload")
-    public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user, @RequestParam("file") MultipartFile file)
+    public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") MultipartFile file)
     {
-        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
+        User user = userService.findUserById(userid);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
         return uploadFile(file, path);
     }
 
@@ -103,21 +98,22 @@ private final String sep = File.separator;
     @GetMapping("/{courseid}/asset/download")
     public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = courseid.toString() + sep + "asset";
+        String path = Paths.get(courseid.toString(), "asset").toString();
         return downloadFile(filename, path);
     }
 
     @GetMapping("/{courseid}/homework/download")
     public ResponseEntity<Resource> downloadHomework(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = courseid.toString() + sep +"homework";
+        String path = Paths.get(courseid.toString(), "homework").toString();
         return downloadFile(filename, path);
     }
 
     @GetMapping("/{courseid}/{homeworkid}/download")
-    public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user, @RequestParam("filename") String filename)
+    public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)
     {
-        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
+        User user = userService.findUserById(id);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
         return downloadFile(filename, path);
     }
 
@@ -130,13 +126,14 @@ private final String sep = File.separator;
     @GetMapping("/{courseid}/homework/list")
     public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
     {
-        String path = courseid.toString() + sep +"homework";
+        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "homework").toString();
         return generateFileList( path);
     }
     @GetMapping("/{courseid}/{homeworkid}/list")
-    public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("user") User user)
+    public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
     {
-        String path = courseid.toString() + sep + user.getFirstName() + "_" + user.getLastName() + "_" + user.getId() + sep + homeworkid.toString();
+        User user = userService.findUserById(id);
+        String path = Paths.get(FileStorageService.STORAGE_DIR,courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
         return generateFileList( path);
     }
 
