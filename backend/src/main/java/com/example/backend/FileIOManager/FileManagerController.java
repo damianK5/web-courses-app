@@ -31,14 +31,14 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/files")
 
-//TODO
-// Potentially change the whole user for just ID and fetch it with UserService?
 @Log
 public class FileManagerController {
 private final String sep = File.separator;
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
     private UserService userService;
 
     //Ogolna metoda do uploadu, mozna jej uzyc do samego przesylu a w tych z mappingiem zrobic rozne typy np wysylanie assety, oddawanie zadania itp
