@@ -27,7 +27,7 @@ public class Admission {
     private Homework homework;
 
     private String filepath;
-    private long admissonDate;
+    private long admissionDate;
     private String studentComment;
     private String teacherComment;
     private int grade;

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { User } from '../../model/user';
+import { User } from '../../model/entities/user';
 import { catchError } from 'rxjs';
 import { AuthService } from '../../service/auth.service';
 
