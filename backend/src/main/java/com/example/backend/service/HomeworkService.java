@@ -1,20 +1,32 @@
 package com.example.backend.service;
 
+import com.example.backend.model.Enrollment;
 import com.example.backend.model.Homework;
+import com.example.backend.model.User;
+import com.example.backend.repo.EnrollmentRepo;
 import com.example.backend.repo.HomeworkRepo;
+import com.example.backend.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import java.time.format.DateTimeFormatter;
 import org.w3c.dom.html.HTMLObjectElement;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class HomeworkService {
     private final HomeworkRepo homeworkRepo;
+    private final EnrollmentRepo enrollmentRepo;
+    private final EmailService emailService;
 
     @Autowired
-    public HomeworkService(HomeworkRepo homeworkRepo) {
+    public HomeworkService(HomeworkRepo homeworkRepo, EnrollmentRepo enrollmentRepo, EmailService emailService) {
         this.homeworkRepo = homeworkRepo;
+        this.enrollmentRepo =  enrollmentRepo;
+        this.emailService = emailService;
     }
 
     public Homework addHomework(Homework homework) {
@@ -36,5 +48,32 @@ public class HomeworkService {
 
     public void deleteHomework(Long id) {
         homeworkRepo.deleteById(id);
+    }
+
+    @Scheduled(cron = "0 * * * * * ")
+    public void Reminder(){
+        List<Homework> Homeworks = homeworkRepo.findAll();
+        for (Homework homework: Homeworks){
+            Date date = new Date(homework.getDeadline());
+            Date today = new Date();
+
+            Calendar calendar = Calendar.getInstance();
+            Calendar calendar1 = Calendar.getInstance();
+
+            calendar.setTime(today);
+            calendar1.setTime(date);
+
+            calendar.add(Calendar.DAY_OF_MONTH,1);
+
+            if (calendar.get(Calendar.YEAR)==calendar1.get(Calendar.YEAR) && calendar.get(Calendar.MONTH)==calendar1.get(Calendar.MONTH) && calendar.get(Calendar.DAY_OF_MONTH)==calendar1.get(Calendar.DAY_OF_MONTH)){
+                var enrollments = enrollmentRepo.getEnrollmentsByCourse(homework.getCourse().getId());
+
+                for(Enrollment enrollment: enrollments){
+                    User user = enrollment.getUser();
+                    emailService.sendSimpleEmail(user.getEmail(), "Przypomnienie o zadaniu domowym", "Witaj "+ user.getFirstName() +" " + user.getLastName() + ". \nWysyłamy tę wiadomość żeby przypomnieć Ci, że do jutra jest termin zadania o tytule:" + homework.getName() +". Po więcej informacji zgłoś się na platformę. Życzymy owocnej nauki na naszej platformie\n\nPozdrawiamy,\nZespół FreeCourses" );
+
+                }
+            }
+        }
     }
 }
