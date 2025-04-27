@@ -1,5 +1,6 @@
 package com.example.backend.auth;
 
+import com.example.backend.model.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,5 @@ public class RegisterRequest {
     private String lastname;
     private String email;
     private String password;
-    // TODO add account type
+    private AccountType accountType;
 }
