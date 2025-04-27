@@ -3,7 +3,7 @@ spring.application.name=Backend
 #MySQL Configuration
 spring.datasource.url=jdbc:mysql://localhost:3306/coursesdb
 spring.datasource.username=root
-spring.datasource.password=Student123
+spring.datasource.password=
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.show-sql: true
 spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
@@ -13,6 +13,6 @@ spring.servlet.multipart.max-request-size=50MB
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=coursesnotifications@gmail.com
-#spring.mail.password= wstaw tutaj has?o wys?ane na grup?
+spring.mail.password= 
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
