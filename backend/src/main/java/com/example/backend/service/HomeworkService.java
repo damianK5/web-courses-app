@@ -1,8 +1,11 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.ResourceNotFoundException;
+import com.example.backend.model.Course;
 import com.example.backend.model.Enrollment;
 import com.example.backend.model.Homework;
 import com.example.backend.model.User;
+import com.example.backend.repo.CourseRepo;
 import com.example.backend.repo.EnrollmentRepo;
 import com.example.backend.repo.HomeworkRepo;
 import com.example.backend.repo.UserRepo;
@@ -21,16 +24,29 @@ public class HomeworkService {
     private final HomeworkRepo homeworkRepo;
     private final EnrollmentRepo enrollmentRepo;
     private final EmailService emailService;
+    private final CourseRepo courseRepo;
 
     @Autowired
-    public HomeworkService(HomeworkRepo homeworkRepo, EnrollmentRepo enrollmentRepo, EmailService emailService) {
+    public HomeworkService(HomeworkRepo homeworkRepo, EnrollmentRepo enrollmentRepo, EmailService emailService, CourseRepo courseRepo) {
         this.homeworkRepo = homeworkRepo;
         this.enrollmentRepo =  enrollmentRepo;
         this.emailService = emailService;
+        this.courseRepo = courseRepo;
     }
 
     public Homework addHomework(Homework homework) {
-        return homeworkRepo.save(homework);
+        Course course = courseRepo.findById(homework.getCourse().getId()).orElseThrow(()->new ResourceNotFoundException("Course with id: "+homework.getCourse().getId() + " not found"));
+
+        Homework newHomework = Homework.builder()
+                .course(course)
+                .name(homework.getName())
+                .description(homework.getDescription())
+                .deadline(homework.getDeadline())
+                .maxGrade(homework.getMaxGrade())
+                .requireAdmission(homework.isRequireAdmission())
+                .filepath(homework.getFilepath())
+                .build();
+        return homeworkRepo.save(newHomework);
     }
 
     public List<Homework> findAllHomeworks() {
@@ -50,7 +66,7 @@ public class HomeworkService {
         homeworkRepo.deleteById(id);
     }
 
-    @Scheduled(cron = "0 * * * * * ")
+    @Scheduled(cron = "0 0 * * * * ")
     public void Reminder(){
         List<Homework> Homeworks = homeworkRepo.findAll();
         for (Homework homework: Homeworks){
