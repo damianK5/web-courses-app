@@ -15,7 +15,7 @@ import java.util.Objects;
 public class FileStorageService {
 
     private static final String sep = File.separator;
-    private static final String ARCHIVE_DIR = "archive" + sep;
+    public static final String ARCHIVE_DIR = "archive" + sep;
     public static final String STORAGE_DIR = "storage" + sep;
 
 

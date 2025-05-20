@@ -41,7 +41,7 @@ private final String sep = File.separator;
     @Autowired
     private UserService userService;
 
-    //Ogolna metoda do uploadu, mozna jej uzyc do samego przesylu a w tych z mappingiem zrobic rozne typy np wysylanie assety, oddawanie zadania itp
+    //ZAPIS DO AKTUALNYCH PLIKOW I ARCHIWUM
 
     public boolean uploadFile(MultipartFile file, String path)
     {
@@ -54,7 +54,7 @@ private final String sep = File.separator;
         }
     }
 
-    //Metoda do wrzucania assetu do kursu, podaje sie ID kursu jako argument
+
     @PostMapping("/{courseid}/asset")
     public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
@@ -62,7 +62,7 @@ private final String sep = File.separator;
         return uploadFile(file, path);
 
     }
-    //Analogicznie, tylko ze dla wrzucania zadan domowycg
+
     @PostMapping("/{courseid}/homework")
     public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
@@ -78,10 +78,43 @@ private final String sep = File.separator;
         return uploadFile(file, path);
     }
 
+    public boolean uploadToArchive(MultipartFile file,@PathVariable String path)
+    {
+        try {
+            fileStorageService.archiveFile(file, path);
+            return true;
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception during upload", e);
+            return false;
+        }
+    }
+    @PostMapping("/archive/{courseid}/asset")
+    public boolean uploadAssetToArchive(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
+    {
+        String path = Paths.get(courseid.toString(), "asset").toString();
+        return uploadToArchive(file, path);
+
+    }
+
+    @PostMapping("/archive/{courseid}/homework")
+    public boolean uploadHomeworkToArchive(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
+    {
+        String path = Paths.get(courseid.toString(), "homework").toString();
+        return uploadToArchive(file, path);
+    }
+
+    @PostMapping("/archive/{courseid}/{homeworkid}")
+    public boolean uploadAdmissionToArchive(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") MultipartFile file)
+    {
+        User user = userService.findUserById(userid);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return uploadToArchive(file, path);
+    }
 
 
 
-//Ogolna metoda do pobierania pliku
+
+//POBIERANIE Z AKTUALNEGO KURSU I ARCHIWUM
     public ResponseEntity<Resource> downloadFile(String filename, String path)
     {
         try {
@@ -117,27 +150,44 @@ private final String sep = File.separator;
         return downloadFile(filename, path);
     }
 
-    @GetMapping("/{courseid}/asset/list")
-    public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
-        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "asset").toString();
+    public ResponseEntity<Resource> downloadFromArchive(@PathVariable String path, @PathVariable String filename){
+        try {
+            var fileToDownload = fileStorageService.getArchivedFile(filename, path);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"" + filename + "\"")
+                    .contentLength(fileToDownload.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(new FileSystemResource(fileToDownload));
+        } catch (IOException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-        return generateFileList( path);
-    }
-    @GetMapping("/{courseid}/homework/list")
-    public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
+    @GetMapping("/archive/{courseid}/asset")
+    public ResponseEntity<Resource> downloadArchivedAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "homework").toString();
-        return generateFileList( path);
+        String path = Paths.get(courseid.toString(), "asset").toString();
+        return downloadFromArchive(filename, path);
     }
-    @GetMapping("/{courseid}/{homeworkid}/list")
-    public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
+
+    @GetMapping("/archive/{courseid}/homework")
+    public ResponseEntity<Resource> downloadArchivedHomework(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = Paths.get(courseid.toString(), "homework").toString();
+        return downloadFromArchive(filename, path);
+    }
+
+    @GetMapping("/archive/{courseid}/{homeworkid}")
+    public ResponseEntity<Resource> downloadArchivedAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)
     {
         User user = userService.findUserById(id);
-        String path = Paths.get(FileStorageService.STORAGE_DIR,courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
-        return generateFileList( path);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return downloadFromArchive(filename, path);
     }
 
 
+
+    //TWORZENIE LIST
 
     private ResponseEntity<?> generateFileList( String path)
     {
@@ -158,6 +208,50 @@ private final String sep = File.separator;
                     .body("Failed to list files: " + e.getMessage());
         }
     }
+
+    @GetMapping("/{courseid}/asset/list")
+    public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
+        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "asset").toString();
+
+        return generateFileList( path);
+    }
+    @GetMapping("/{courseid}/homework/list")
+    public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
+    {
+        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "homework").toString();
+        return generateFileList( path);
+    }
+    @GetMapping("/{courseid}/{homeworkid}/list")
+    public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
+    {
+        User user = userService.findUserById(id);
+        String path = Paths.get(FileStorageService.STORAGE_DIR,courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return generateFileList( path);
+    }
+    @GetMapping("/archive/{courseid}/asset/list")
+    public ResponseEntity<?> listArchiveAssetFiles(@PathVariable Long courseid) {
+        String path = Paths.get(FileStorageService.ARCHIVE_DIR, courseid.toString(), "asset").toString();
+
+        return generateFileList( path);
+    }
+    @GetMapping("/archive/{courseid}/homework/list")
+    public ResponseEntity<?> listArchivedHomeworkFiles(@PathVariable Long courseid)
+    {
+        String path = Paths.get(FileStorageService.ARCHIVE_DIR, courseid.toString(), "homework").toString();
+        return generateFileList( path);
+    }
+    @GetMapping("/archive/{courseid}/{homeworkid}/list")
+    public ResponseEntity<?> listArchivedAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
+    {
+        User user = userService.findUserById(id);
+        String path = Paths.get(FileStorageService.ARCHIVE_DIR,courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return generateFileList( path);
+    }
+
+
+
+
+
 
 
 }
