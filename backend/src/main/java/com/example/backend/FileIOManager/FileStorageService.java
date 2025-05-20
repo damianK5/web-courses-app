@@ -17,16 +17,18 @@ public class FileStorageService {
     private static final String sep = File.separator;
     private static final String ARCHIVE_DIR = "archive" + sep;
     public static final String STORAGE_DIR = "storage" + sep;
-    public void saveFile(MultipartFile fileToSave, String path) throws IOException
+
+
+    private void save(MultipartFile fileToSave, String path, String dir) throws IOException
     {
         if(fileToSave == null)
         {
             throw new NullPointerException("fileToSave is null");
         }
 
-        var targetPath = Paths.get(STORAGE_DIR, path).normalize();
+        var targetPath = Paths.get(dir, path).normalize();
         var targetFile = new File(targetPath + sep + fileToSave.getOriginalFilename());
-        if(!Objects.equals(targetFile.getParent(), STORAGE_DIR + path))
+        if(!Objects.equals(targetFile.getParent(), dir + path))
         {
             throw new SecurityException("Unsupported filename");
         }
@@ -34,15 +36,26 @@ public class FileStorageService {
         Files.copy(fileToSave.getInputStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public File getDownloadFile(String filename, String path) throws IOException
+    public void saveFile(MultipartFile fileToSave, String path) throws IOException
+    {
+        save(fileToSave, path, STORAGE_DIR);
+    }
+
+    public void archiveFile(MultipartFile fileToSave, String path) throws IOException
+    {
+        save(fileToSave, path, ARCHIVE_DIR);
+    }
+
+
+    private File download(String filename, String path, String dir) throws  IOException
     {
         if(filename == null)
         {
             throw new NullPointerException("filename is null");
         }
-        var fileToDownload = new File(STORAGE_DIR + path + sep + filename);
+        var fileToDownload = new File(dir + path + sep + filename);
 
-        if(!Objects.equals(fileToDownload.getParent(), STORAGE_DIR + path))
+        if(!Objects.equals(fileToDownload.getParent(), dir + path))
         {
             throw new SecurityException("Unsupported filename");
         }
@@ -52,6 +65,16 @@ public class FileStorageService {
         }
 
         return fileToDownload;
+    }
+
+    public File getDownloadFile(String filename, String path) throws IOException
+    {
+        return download(filename, path, STORAGE_DIR);
+    }
+
+    public File getArchivedFile(String filename, String path) throws IOException
+    {
+        return download(filename, path, ARCHIVE_DIR);
     }
 
 }

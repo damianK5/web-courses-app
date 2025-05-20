@@ -55,7 +55,7 @@ private final String sep = File.separator;
     }
 
     //Metoda do wrzucania assetu do kursu, podaje sie ID kursu jako argument
-    @PostMapping("/{courseid}/asset/upload")
+    @PostMapping("/{courseid}/asset")
     public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
         String path = Paths.get(courseid.toString(), "asset").toString();
@@ -63,14 +63,14 @@ private final String sep = File.separator;
 
     }
     //Analogicznie, tylko ze dla wrzucania zadan domowycg
-    @PostMapping("/{courseid}/homework/upload")
+    @PostMapping("/{courseid}/homework")
     public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
         String path = Paths.get(courseid.toString(), "homework").toString();
         return uploadFile(file, path);
     }
 
-    @PostMapping("/{courseid}/{homeworkid}/upload")
+    @PostMapping("/{courseid}/{homeworkid}")
     public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") MultipartFile file)
     {
         User user = userService.findUserById(userid);
@@ -95,21 +95,21 @@ private final String sep = File.separator;
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/{courseid}/asset/download")
+    @GetMapping("/{courseid}/asset")
     public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
         String path = Paths.get(courseid.toString(), "asset").toString();
         return downloadFile(filename, path);
     }
 
-    @GetMapping("/{courseid}/homework/download")
+    @GetMapping("/{courseid}/homework")
     public ResponseEntity<Resource> downloadHomework(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
         String path = Paths.get(courseid.toString(), "homework").toString();
         return downloadFile(filename, path);
     }
 
-    @GetMapping("/{courseid}/{homeworkid}/download")
+    @GetMapping("/{courseid}/{homeworkid}")
     public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)
     {
         User user = userService.findUserById(id);
