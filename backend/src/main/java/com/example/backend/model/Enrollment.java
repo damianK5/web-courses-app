@@ -11,17 +11,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@IdClass(EnrollmentId.class)
 public class Enrollment implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name="course_id", nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
     private Boolean confirmed;

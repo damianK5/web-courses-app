@@ -1,9 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.ResourceNotFoundException;
-import com.example.backend.model.Course;
-import com.example.backend.model.Enrollment;
-import com.example.backend.model.User;
+import com.example.backend.model.*;
 import com.example.backend.repo.CourseRepo;
 import com.example.backend.repo.EnrollmentRepo;
 import com.example.backend.repo.UserRepo;
@@ -25,16 +23,23 @@ public class EnrollmentService {
         this.courseRepo = courseRepo;
     }
 
-    public Enrollment addEnrollment(Enrollment enrollment) {
+    public Enrollment addEnrollment(EnrollmentRequestDTO enrollment) {
 
-        User user = userRepo.findById(enrollment.getUser().getId()).orElseThrow(()->new ResourceNotFoundException("User with id: " +enrollment.getUser().getId() + " not found"));
-        Course course = courseRepo.findById(enrollment.getCourse().getId()).orElseThrow(() ->new ResourceNotFoundException("Course with id: " + enrollment.getCourse().getId()+ " not found") );
+
+        User user = userRepo.findById(enrollment.getUser_id()).orElseThrow(()->new ResourceNotFoundException("User with id: " +enrollment.getUser_id() + " not found"));
+        Course course = courseRepo.findById(enrollment.getCourse_id()).orElseThrow(() ->new ResourceNotFoundException("Course with id: " + enrollment.getCourse_id()+ " not found") );
+
+        boolean exists = enrollmentRepo.existsByUserAndCourse(user, course);
+        if (exists) {
+            throw new IllegalStateException("Enrollment already exists for this user and course.");
+        }
 
         Enrollment newEnrollment = Enrollment.builder()
             .user(user)
             .course(course)
             .confirmed(enrollment.getConfirmed())
             .type(enrollment.getType())
+            .groupNumber(enrollment.getGroupNumber())
             .build();
 
         return enrollmentRepo.save(newEnrollment);
@@ -45,13 +50,19 @@ public class EnrollmentService {
     }
     public List<Enrollment> findEnrollmentsByUser(long id) {return enrollmentRepo.getEnrollmentsByUser(id);}
     public List<Enrollment> findEnrollmentsByCourse(long id) {return enrollmentRepo.getEnrollmentsByCourse(id);}
-    public Enrollment updateEnrollment(Enrollment enrollment) {
-        return enrollmentRepo.save(enrollment);
+    public Enrollment updateEnrollment(EnrollmentRequestDTO enrollment) {
+        EnrollmentId id = new EnrollmentId(enrollment.getUser_id(), enrollment.getCourse_id());
+        Enrollment existing = enrollmentRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Enrollment with user_id: " + id.getUser() + " and course_id:" +id.getCourse()+ " not found"));
+        System.out.println(existing);
+        existing.setConfirmed(enrollment.getConfirmed());
+        existing.setType(enrollment.getType());
+        existing.setGroupNumber(enrollment.getGroupNumber());
+        return enrollmentRepo.save(existing);
     }
-    public Enrollment findEnrollmentById(Long id) {
+    public Enrollment findEnrollmentById(EnrollmentId id) {
         return enrollmentRepo.findById(id).orElse(null);
     }
-    public void deleteEnrollment(Long id) {
+    public void deleteEnrollment(EnrollmentId id) {
         enrollmentRepo.deleteById(id);
     }
 }

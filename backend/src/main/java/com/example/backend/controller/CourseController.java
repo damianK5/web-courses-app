@@ -23,9 +23,16 @@ public class CourseController {
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Course>> getCoursesByUserId(@PathVariable Long userId) {
+        List<Course> courses = courseService.findCourseByUser(userId);
+        return new ResponseEntity<>(courses, HttpStatus.OK);
+    }
+
     @GetMapping("/find/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         Course course = courseService.findCourseById(id);
+        System.out.println(course);
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 

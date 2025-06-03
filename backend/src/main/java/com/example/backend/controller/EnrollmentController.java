@@ -1,11 +1,14 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Enrollment;
+import com.example.backend.model.EnrollmentId;
+import com.example.backend.model.EnrollmentRequestDTO;
 import com.example.backend.service.EnrollmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.util.List;
 
 @RestController
@@ -23,8 +26,9 @@ public class EnrollmentController {
         return new ResponseEntity<>(enrollments, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable Long id) {
+    @GetMapping("/find")
+    public ResponseEntity<Enrollment> getEnrollmentById(@RequestParam Long userId, @RequestParam Long courseId) {
+        EnrollmentId id = new EnrollmentId(userId, courseId);
         Enrollment enrollment = enrollmentService.findEnrollmentById(id);
         return new ResponseEntity<>(enrollment, HttpStatus.OK);
     }
@@ -36,7 +40,7 @@ public class EnrollmentController {
         return new ResponseEntity<>(enrollments, HttpStatus.OK);
     }
 
-    @GetMapping("/find/course/id")
+    @GetMapping("/find/course/{id}")
     public ResponseEntity<List<Enrollment>> getEnrollmentsByCourse(@PathVariable Long id)
     {
         List<Enrollment> enrollments = enrollmentService.findEnrollmentsByCourse(id);
@@ -44,19 +48,20 @@ public class EnrollmentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Enrollment> addEnrollment(@RequestBody Enrollment enrollment) {
+    public ResponseEntity<Enrollment> addEnrollment(@RequestBody EnrollmentRequestDTO enrollment) {
         Enrollment newEnrollment = enrollmentService.addEnrollment(enrollment);
         return new ResponseEntity<>(newEnrollment, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Enrollment> updateEnrollment(@RequestBody Enrollment enrollment) {
+    public ResponseEntity<Enrollment> updateEnrollment(@RequestBody EnrollmentRequestDTO enrollment) {
         Enrollment updatedEnrollment = enrollmentService.updateEnrollment(enrollment);
         return new ResponseEntity<>(updatedEnrollment, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEnrollment(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteEnrollment(@RequestParam Long userId, @RequestParam Long courseId) {
+        EnrollmentId id = new EnrollmentId(userId, courseId);
         enrollmentService.deleteEnrollment(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
