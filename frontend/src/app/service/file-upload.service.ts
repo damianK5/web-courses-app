@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,18 @@ private apiServerUrl = environment.apiUrl;
   {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<boolean>(`/files/${courseID}/asset`, formData)
+
+    return this.http.post<boolean>(`/files/${courseID}/asset`, formData).pipe
+    (
+      switchMap (success => 
+      {
+        if (success)
+        {
+          return this.http.post<boolean>(`/files/archive/${courseID}/asset`, formData)
+        }
+        else {return of(false)}
+      })
+    )
   }
 
   public uploadHomework(file:File, courseID: number): Observable<boolean>
@@ -23,7 +34,17 @@ private apiServerUrl = environment.apiUrl;
 {
   const formData = new FormData();
   formData.append('file', file);
-  return this.http.post<boolean>(`/files/${courseID}/homework`, formData)
+  return this.http.post<boolean>(`/files/${courseID}/homework`, formData).pipe
+    (
+      switchMap (success => 
+      {
+        if (success)
+        {
+          return this.http.post<boolean>(`/files/archive/${courseID}/homework`, formData)
+        }
+        else {return of(false)}
+      })
+    )
 }
 
 public uploadAdmission(file: File, courseID: number, userID: number, homeworkID: number): Observable<boolean>
@@ -31,7 +52,17 @@ public uploadAdmission(file: File, courseID: number, userID: number, homeworkID:
   const formData = new FormData();
   formData.append('file', file);
   formData.append('userid', userID.toString());
-  return this.http.post<boolean>(`/files/${courseID}/${homeworkID}`, formData)
+  return this.http.post<boolean>(`/files/${courseID}/${homeworkID}`, formData).pipe
+    (
+      switchMap (success => 
+      {
+        if (success)
+        {
+          return this.http.post<boolean>(`/files/archive/${courseID}/${homeworkID}`, formData)
+        }
+        else {return of(false)}
+      })
+    )
 }
 }
 
