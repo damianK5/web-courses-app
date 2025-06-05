@@ -35,4 +35,28 @@ export class FileDownloadService {
 
     return this.http.get(url, {params, responseType: 'blob'})
   }
+
+    public downloadArchivedAsset(courseid: number, filename: string): Observable<Blob>
+  {
+    const params = new HttpParams().set('filename', filename)
+    const url = `/files/archive/${courseid}/asset`;
+
+    return this.http.get(url, {params, responseType: 'blob'});
+  }
+
+  public downloadArchivedHomework(courseid:number, filename: string): Observable<Blob>
+  {
+    const params = new HttpParams().set('filename', filename)
+    const url = `/files/archive/${courseid}/homework`;
+
+    return this.http.get(url, {params, responseType: 'blob'})
+  }
+
+  public downloadArchivedAdmission(userID:number, courseID: number, homeworkID: number, filename:string)
+  {
+    const params = new HttpParams().set('filename', filename).set('userid', userID.toString())
+    const url = `/files/archive/${courseID}/${homeworkID}`;
+
+    return this.http.get(url, {params, responseType: 'blob'})
+  }
 }
