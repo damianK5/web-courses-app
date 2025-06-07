@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../model/login-request';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
@@ -7,6 +7,8 @@ import { LoginResponse } from '../model/login-response';
 import { Router } from '@angular/router';
 import { DecodedToken } from '../model/token';
 import { jwtDecode } from "jwt-decode";
+import { User } from '../model/entities/user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class AuthService {
   private apiServerUrl = environment.apiUrl;
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
+  userService = inject(UserService);
 
   constructor(
     private http: HttpClient,
@@ -32,6 +35,22 @@ export class AuthService {
         return response;
       }));
   }
+
+  getCurrentUserDetails(): Observable<User> {
+    const token = this.getToken();
+    if (!token) return throwError(() => new Error('No token found'));
+
+    const { sub: email } = this.decodeToken(token);
+
+    return this.userService.getUserByEmail(email).pipe(
+      tap(user=>this.userService.setUser(user)),
+      catchError(error => {
+        console.error('Failed to fetch user details', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 
   isLoggedIn(): boolean {
     const token = this.getToken();

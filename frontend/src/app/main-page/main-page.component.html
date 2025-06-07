@@ -1,8 +1,11 @@
-<h2>Welcome, {{ email }}</h2>
-<p>Your role: {{ roles.join(', ') }}</p>
+<link href="../../styles.scss">
+ <app-header></app-header>
+<h2 class="text-center text-5xl">
+  Welcome, {{ email() }}</h2> 
+<body style="text-align:center ">
+  <app-courses-panel></app-courses-panel>
+</body>
+
 
 <button (click)="logout()" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Logout</button>
 
-<!-- @for (user of users(); track $index) {
-    <p>{{ user.name }}</p>
-} -->

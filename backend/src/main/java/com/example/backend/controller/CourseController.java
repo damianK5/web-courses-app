@@ -32,7 +32,6 @@ public class CourseController {
     @GetMapping("/find/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         Course course = courseService.findCourseById(id);
-        System.out.println(course);
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 

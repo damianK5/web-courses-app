@@ -3,6 +3,7 @@ import { AuthService } from '../../service/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginRequest } from '../../model/login-request';
 import { Router } from '@angular/router';
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   constructor(private auth: AuthService) {}
-
+  userService = inject(UserService);
   router = inject(Router);
 
   userFrom: FormGroup = new FormGroup({
@@ -31,6 +32,7 @@ export class LoginComponent {
     this.auth.login(this.request).subscribe({
       next: (res) => {
         console.log('Received response: ' + res.token);
+        
         this.router.navigate(['/']);
       }, error: (err) => {
         console.log('Error response: ' + err);

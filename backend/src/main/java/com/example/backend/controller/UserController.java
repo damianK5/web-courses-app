@@ -29,13 +29,11 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    // Register is in auth/AuthenticationController
-
-//    @PostMapping("/add")
-//    public ResponseEntity<User> addUser(@RequestBody User user) {
-//        User newUser = userService.addUser(user);
-//        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-//    }
+    @GetMapping("/find-email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user = userService.findUserByEmail(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
