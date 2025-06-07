@@ -77,4 +77,33 @@ public class FileStorageService {
         return download(filename, path, ARCHIVE_DIR);
     }
 
+    private boolean remove(String  filename, String path, String dir)
+    {
+        if(filename == null)
+        {
+            throw new NullPointerException("filename is null");
+        }
+
+        var targetPath = Paths.get(dir, path).normalize();
+        var targetFile = new File(targetPath + sep + filename);
+
+        if(!Objects.equals(targetFile.getParent(), dir + path))
+        {
+            throw new SecurityException("Unsupported filename");
+        }
+
+        return targetFile.delete();
+
+    }
+
+    public boolean removeFile(String filename, String path)
+    {
+        return remove(filename, path, STORAGE_DIR);
+    }
+
+    public boolean removeArchivedFile(String filename, String path)
+    {
+        return remove(filename, path, ARCHIVE_DIR);
+    }
+
 }
