@@ -140,6 +140,33 @@ private final String sep = File.separator;
         return removeFile(path, filename);
     }
 
+    private boolean removeArchivedFile(String path, String filename)
+    {
+        return fileStorageService.removeArchivedFile(filename, path);
+    }
+
+    @DeleteMapping("/archive/{courseid}/asset")
+    public boolean removeArchivedAssetFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = Paths.get(courseid.toString(), "asset").toString();
+        return removeArchivedFile(path, filename);
+    }
+
+    @DeleteMapping("/archive/{courseid}/homework")
+    public boolean removeArchivedHomeworkFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = Paths.get(courseid.toString(), "homework").toString();
+        return removeArchivedFile(path, filename);
+    }
+
+    @DeleteMapping("/archive/{courseid}/{homeworkid}")
+    public boolean removeArchivedAdmissionFile(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("filename") String filename, @RequestParam("userid") Long userid)
+    {
+        User user = userService.findUserById(userid);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return removeArchivedFile(path, filename);
+    }
+
 //POBIERANIE Z AKTUALNEGO KURSU I ARCHIWUM
     public ResponseEntity<Resource> downloadFile(String filename, String path)
     {
@@ -167,6 +194,7 @@ private final String sep = File.separator;
         String path = Paths.get(courseid.toString(), "homework").toString();
         return downloadFile(filename, path);
     }
+
 
     @GetMapping("/{courseid}/{homeworkid}")
     public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)

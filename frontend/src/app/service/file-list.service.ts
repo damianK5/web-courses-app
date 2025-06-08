@@ -13,37 +13,37 @@ private apiServerUrl = environment.apiUrl;
 
   public getAssetFilesList(courseID: number): Observable<string[]>
   {
-    const url = `/files/${courseID}/asset/list`
+    const url = `${this.apiServerUrl}/files/${courseID}/asset/list`
     return this.http.get<string[]>(url);
   }
 
     public getHomeworkFilesList(courseID: number): Observable<string[]>
   {
-    const url = `/files/${courseID}/homework/list`
+    const url = `${this.apiServerUrl}/files/${courseID}/homework/list`
     return this.http.get<string[]>(url);
   }
 
   public getAdmissionFilesList(courseID: number, userID: number, homeworkID: number): Observable<string[]>
   {
-    const url = `/files/${courseID}/${homeworkID}/list`
+    const url = `${this.apiServerUrl}/files/${courseID}/${homeworkID}/list`
     return this.http.get<string[]>(url);
   }
 
     public getArchivedAssetFilesList(courseID: number): Observable<string[]>
   {
-    const url = `/files/archive/${courseID}/asset/list`
+    const url = `${this.apiServerUrl}/files/archive/${courseID}/asset/list`
     return this.http.get<string[]>(url);
   }
 
     public getArchivedHomeworkFilesList(courseID: number): Observable<string[]>
   {
-    const url = `/files/archive/${courseID}/homework/list`
+    const url = `${this.apiServerUrl}/files/archive/${courseID}/homework/list`
     return this.http.get<string[]>(url);
   }
 
   public getArchivedAdmissionFilesList(courseID: number, userID: number, homeworkID: number): Observable<string[]>
   {
-    const url = `/files/archive/${courseID}/${homeworkID}/list`
+    const url = `${this.apiServerUrl}/files/archive/${courseID}/${homeworkID}/list`
     return this.http.get<string[]>(url);
   }
 }

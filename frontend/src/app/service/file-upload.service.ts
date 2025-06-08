@@ -16,13 +16,13 @@ private apiServerUrl = environment.apiUrl;
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<boolean>(`/files/${courseID}/asset`, formData).pipe
+    return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/asset`, formData).pipe
     (
       switchMap (success => 
       {
         if (success)
         {
-          return this.http.post<boolean>(`/files/archive/${courseID}/asset`, formData)
+          return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/asset`, formData)
         }
         else {return of(false)}
       })
@@ -34,13 +34,13 @@ private apiServerUrl = environment.apiUrl;
 {
   const formData = new FormData();
   formData.append('file', file);
-  return this.http.post<boolean>(`/files/${courseID}/homework`, formData).pipe
+  return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
     (
       switchMap (success => 
       {
         if (success)
         {
-          return this.http.post<boolean>(`/files/archive/${courseID}/homework`, formData)
+          return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/homework`, formData)
         }
         else {return of(false)}
       })
@@ -52,13 +52,13 @@ public uploadAdmission(file: File, courseID: number, userID: number, homeworkID:
   const formData = new FormData();
   formData.append('file', file);
   formData.append('userid', userID.toString());
-  return this.http.post<boolean>(`/files/${courseID}/${homeworkID}`, formData).pipe
+  return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/${homeworkID}`, formData).pipe
     (
       switchMap (success => 
       {
         if (success)
         {
-          return this.http.post<boolean>(`/files/archive/${courseID}/${homeworkID}`, formData)
+          return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/${homeworkID}`, formData)
         }
         else {return of(false)}
       })
