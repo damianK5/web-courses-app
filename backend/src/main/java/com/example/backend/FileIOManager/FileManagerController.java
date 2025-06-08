@@ -112,7 +112,33 @@ private final String sep = File.separator;
     }
 
 
+    //USUWANIE PLIKU
+    private boolean removeFile(String path, String fileName)
+    {
+        return fileStorageService.removeFile(fileName, path);
+    }
 
+    @DeleteMapping("/{courseid}/asset")
+    public boolean removeAssetFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = Paths.get(courseid.toString(), "asset").toString();
+        return removeFile(path, filename);
+    }
+
+    @DeleteMapping("/{courseid}/homework")
+    public boolean removeHomeworkFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    {
+        String path = Paths.get(courseid.toString(), "homework").toString();
+        return removeFile(path, filename);
+    }
+
+    @DeleteMapping("/{courseid}/{homeworkid}")
+    public boolean removeAdmissionFile(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("filename") String filename, @RequestParam("userid") Long userid)
+    {
+        User user = userService.findUserById(userid);
+        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        return removeFile(path, filename);
+    }
 
 //POBIERANIE Z AKTUALNEGO KURSU I ARCHIWUM
     public ResponseEntity<Resource> downloadFile(String filename, String path)
@@ -120,7 +146,7 @@ private final String sep = File.separator;
         try {
             var fileToDownload = fileStorageService.getDownloadFile(filename, path);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"" + filename + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"" + filename + "\"")
                     .contentLength(fileToDownload.length())
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(new FileSystemResource(fileToDownload));

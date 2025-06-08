@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
@@ -19,22 +20,25 @@ public class FileStorageService {
     public static final String STORAGE_DIR = "storage" + sep;
 
 
-    private void save(MultipartFile fileToSave, String path, String dir) throws IOException
-    {
-        if(fileToSave == null)
-        {
+    private void save(MultipartFile fileToSave, String path, String dir) throws IOException {
+        if (fileToSave == null) {
             throw new NullPointerException("fileToSave is null");
         }
 
-        var targetPath = Paths.get(dir, path).normalize();
-        var targetFile = new File(targetPath + sep + fileToSave.getOriginalFilename());
-        if(!Objects.equals(targetFile.getParent(), dir + path))
-        {
-            throw new SecurityException("Unsupported filename");
+        Path baseDir = Paths.get(dir).normalize().toAbsolutePath();
+        Path fullTargetDir = baseDir.resolve(path).normalize();
+
+        // This will prevent path traversal attempts (e.g. someone uploading a file with "../../etc/passwd")
+        if (!fullTargetDir.startsWith(baseDir)) {
+            throw new SecurityException("Path traversal attempt detected");
         }
-        Files.createDirectories(targetPath);
-        Files.copy(fileToSave.getInputStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        Files.createDirectories(fullTargetDir);
+
+        Path targetFilePath = fullTargetDir.resolve(Objects.requireNonNull(fileToSave.getOriginalFilename())).normalize();
+        Files.copy(fileToSave.getInputStream(), targetFilePath, StandardCopyOption.REPLACE_EXISTING);
     }
+
 
     public void saveFile(MultipartFile fileToSave, String path) throws IOException
     {
@@ -53,12 +57,22 @@ public class FileStorageService {
         {
             throw new NullPointerException("filename is null");
         }
-        var fileToDownload = new File(dir + path + sep + filename);
+        Path filePath = Paths.get(dir, path, filename).normalize();
+        File fileToDownload = filePath.toFile();
 
-        if(!Objects.equals(fileToDownload.getParent(), dir + path))
-        {
-            throw new SecurityException("Unsupported filename");
+
+        Path baseDir = Paths.get(dir).normalize().toAbsolutePath();
+        Path resolvedFilePath = baseDir.resolve(path).resolve(filename).normalize();
+
+        if (!resolvedFilePath.startsWith(baseDir)) {
+            throw new SecurityException("Path traversal attempt detected");
         }
+
+        fileToDownload = resolvedFilePath.toFile();
+        if (!fileToDownload.exists()) {
+            throw new FileNotFoundException("File not found");
+        }
+
         if(!fileToDownload.exists())
         {
             throw new FileNotFoundException("File not found");
