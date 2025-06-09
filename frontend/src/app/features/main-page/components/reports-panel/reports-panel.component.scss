@@ -1,0 +1,22 @@
+.panel{
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    text-align: center;
+
+    h1 {
+        font-size: 50px;
+    }
+    h2 {
+        display: block;
+        cursor: pointer;
+        font-size: 30px;
+        color: blue;
+         &:hover {
+            text-decoration: underline;
+            display: inline; 
+        }
+
+    }
+
+}

@@ -1,9 +1,0 @@
-<div class="panel">
-  <h2>My Courses</h2>
-  <ul class="course-list">
-    <div *ngIf="courses$">
-        <li *ngFor="let course of courses$ | async">
-            {{ course.name }}</li>
-    </div>   
-  </ul>
-</div>

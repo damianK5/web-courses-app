@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Admission;
+import com.example.backend.model.AdmissionRequestDTO;
 import com.example.backend.service.AdmissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,13 +46,13 @@ public class AdmissionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Admission> addAdmission(@RequestBody Admission admission) {
+    public ResponseEntity<Admission> addAdmission(@RequestBody AdmissionRequestDTO admission) {
         Admission newAdmission = admissionService.addAdmission(admission);
         return new ResponseEntity<>(newAdmission, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Admission> updateAdmission(@RequestBody Admission admission) {
+    public ResponseEntity<Admission> updateAdmission(@RequestBody AdmissionRequestDTO admission) {
         Admission updatedAdmission = admissionService.updateAdmission(admission);
         return new ResponseEntity<>(updatedAdmission, HttpStatus.OK);
     }

@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface HomeworkRepo extends JpaRepository<Homework, Long> {
 
-    @Query("select h from Homework h where h.course.id = ?1")
+    @Query("select h from Homework h where h.course.id = :course_id")
     public List<Homework> getHomeworksByCourse(@Param("course_id") long id);
 }

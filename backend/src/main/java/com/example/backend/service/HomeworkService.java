@@ -1,10 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.ResourceNotFoundException;
-import com.example.backend.model.Course;
-import com.example.backend.model.Enrollment;
-import com.example.backend.model.Homework;
-import com.example.backend.model.User;
+import com.example.backend.model.*;
 import com.example.backend.repo.CourseRepo;
 import com.example.backend.repo.EnrollmentRepo;
 import com.example.backend.repo.HomeworkRepo;
@@ -34,8 +31,8 @@ public class HomeworkService {
         this.courseRepo = courseRepo;
     }
 
-    public Homework addHomework(Homework homework) {
-        Course course = courseRepo.findById(homework.getCourse().getId()).orElseThrow(()->new ResourceNotFoundException("Course with id: "+homework.getCourse().getId() + " not found"));
+    public Homework addHomework(HomeworkRequestDTO homework) {
+        Course course = courseRepo.findById(homework.getCourse_id()).orElseThrow(()->new ResourceNotFoundException("Course with id: "+homework.getCourse_id()+ " not found"));
 
         Homework newHomework = Homework.builder()
                 .course(course)
@@ -54,8 +51,17 @@ public class HomeworkService {
     }
     public List<Homework> findHomeworksByCourse(long id) {return homeworkRepo.getHomeworksByCourse(id);}
 
-    public Homework updateHomework(Homework homework) {
-        return homeworkRepo.save(homework);
+    public Homework updateHomework(HomeworkRequestDTO homework) {
+        Homework existing = homeworkRepo.findById(homework.getId()).orElseThrow(() -> new ResourceNotFoundException("Homework with id: " + homework.getId() + " not found"));
+        Course course = courseRepo.findById(homework.getCourse_id()).orElseThrow(()->new ResourceNotFoundException("Course with id: "+homework.getCourse_id()+ " not found"));
+
+        existing.setDescription(homework.getDescription());
+        existing.setDeadline(homework.getDeadline());
+        existing.setMaxGrade(homework.getMaxGrade());
+        existing.setRequireAdmission(homework.isRequireAdmission());
+        existing.setFilepath(homework.getFilepath());
+        existing.setCourse(course);
+        return homeworkRepo.save(existing);
     }
 
     public Homework findHomeworkById(Long id) {

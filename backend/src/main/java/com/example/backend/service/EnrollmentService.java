@@ -53,7 +53,6 @@ public class EnrollmentService {
     public Enrollment updateEnrollment(EnrollmentRequestDTO enrollment) {
         EnrollmentId id = new EnrollmentId(enrollment.getUser_id(), enrollment.getCourse_id());
         Enrollment existing = enrollmentRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Enrollment with user_id: " + id.getUser() + " and course_id:" +id.getCourse()+ " not found"));
-        System.out.println(existing);
         existing.setConfirmed(enrollment.getConfirmed());
         existing.setType(enrollment.getType());
         existing.setGroupNumber(enrollment.getGroupNumber());

@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Homework;
+import com.example.backend.model.HomeworkRequestDTO;
 import com.example.backend.service.HomeworkService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,20 +32,19 @@ public class HomeworkController {
     }
 
     @GetMapping("/find/course/{id}")
-    public ResponseEntity<List<Homework>> getHomeworksByCourse(@PathVariable Long id)
-    {
+    public ResponseEntity<List<Homework>> getHomeworksByCourse(@PathVariable Long id) {
         List<Homework> homeworks = homeworkService.findHomeworksByCourse(id);
-        return  new ResponseEntity<>(homeworks, HttpStatus.OK);
+        return new ResponseEntity<>(homeworks, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Homework> addHomework(@RequestBody Homework homework) {
+    public ResponseEntity<Homework> addHomework(@RequestBody HomeworkRequestDTO homework) {
         Homework newHomework = homeworkService.addHomework(homework);
         return new ResponseEntity<>(newHomework, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Homework> updateHomework(@RequestBody Homework homework) {
+    public ResponseEntity<Homework> updateHomework(@RequestBody HomeworkRequestDTO homework) {
         Homework updatedHomework = homeworkService.updateHomework(homework);
         return new ResponseEntity<>(updatedHomework, HttpStatus.OK);
     }
