@@ -1,1 +1,7 @@
-<p>my-profile works!</p>
+<h1>{{user?.firstName}} {{user?.lastName}}</h1>
+<h2>Szczegóły</h2>
+<h3>Adres e-mail:    {{user?.email}}</h3>
+<h2>Udział w kursach:</h2>
+<li *ngFor="let course of myCourses">
+  <h2>{{course.name}}</h2>
+</li>

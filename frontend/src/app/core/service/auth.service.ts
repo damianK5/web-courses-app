@@ -23,14 +23,14 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')!));
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('loggedUser')!));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiServerUrl}/api/v1/auth/authenticate`, request)
       .pipe(map(response => {
-        localStorage.setItem('currentUser', JSON.stringify(response));
+        localStorage.setItem('loggedUser', JSON.stringify(response));
         this.currentUserSubject.next(response);
         return response;
       }));
@@ -59,7 +59,7 @@ export class AuthService {
   }
 
   getToken() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser')!);
+    const currentUser = JSON.parse(localStorage.getItem('loggedUser')!);
     return currentUser?.token;
   }
 
@@ -73,13 +73,13 @@ export class AuthService {
   }
 
   getCurrentUserRoles(): string[] {
-    const token = localStorage.getItem('token'); // Or your storage method
+    const token = this.getToken();
     if (!token) return [];
     return this.decodeToken(token).roles;
   }
 
   getCurrentUserEmail(): string {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (!token) return '';
     return this.decodeToken(token).sub;
   }
@@ -89,11 +89,11 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
+    this.currentUserSubject.next(null);
     const token = this.getToken();
     
     // clear the token from user's browser
     this.clearAuthData();
-    
     if (!token) {
       this.router.navigate(['/login']);
       return of(undefined);
@@ -116,6 +116,6 @@ export class AuthService {
   }
 
   private clearAuthData() {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('loggedUser');
   }
 }

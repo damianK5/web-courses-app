@@ -15,7 +15,7 @@ import { AdmissionService } from '../../core/service/admission.service';
 
 @Component({
   selector: 'app-main-page',
-  imports: [HeaderComponent, CoursesPanelComponent, HomeworksPanelComponent],
+  imports: [CoursesPanelComponent, HomeworksPanelComponent],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
@@ -47,6 +47,7 @@ export class MainPageComponent implements OnInit {
             console.error("Failed", error);
           }
         })
+        this.courseService.getCourses().subscribe();
       },
       error: (err) => {
           console.error('Could not load user', err)

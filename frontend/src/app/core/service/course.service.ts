@@ -15,8 +15,16 @@ export class CourseService {
   private currentCoursesSubject = new BehaviorSubject<Course[] | null>(null);
   public currentCourses$ = this.currentCoursesSubject.asObservable();
 
-  setCourses(courses: Course[]) {
+  private allCoursesSubject = new BehaviorSubject<Course[] | null>(null);
+  public allCourses$ = this.allCoursesSubject.asObservable();
+  
+
+  setUserCourses(courses: Course[]) {
     return this.currentCoursesSubject.next(courses);
+  }
+
+  setAllcources(courses: Course[]){
+    return this.allCoursesSubject.next(courses);
   }
 
   getCurrentCourses(): Course[] | null {
@@ -35,7 +43,13 @@ export class CourseService {
 
   public getCourses(): Observable<Course[]>
   {
-    return this.http.get<Course[]>(`${this.apiServerUrl}/course/all`);
+    return this.http.get<Course[]>(`${this.apiServerUrl}/course/all`).pipe(
+      tap(courses=>this.setAllcources(courses)),
+      catchError(error => {
+        console.error('Failed to fetch user details', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   public getCoursesById(id: number): Observable<Course>
@@ -60,7 +74,7 @@ export class CourseService {
   
   public getCoursesByUserId(userId:number):Observable<Course[]>{
     return this.http.get<Course[]>(`${this.apiServerUrl}/course/user/${userId}`).pipe(
-      tap(courses => this.setCourses(courses)),
+      tap(courses => this.setUserCourses(courses)),
       catchError(error => {
         console.error('Failed to fetch user details', error);
         return throwError(() => error);

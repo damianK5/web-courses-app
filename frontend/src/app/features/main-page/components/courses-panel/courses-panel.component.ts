@@ -3,10 +3,11 @@ import { CourseService } from '../../../../core/service/course.service';
 import { CommonModule } from '@angular/common';
 import { map, Observable, tap } from 'rxjs';
 import { Course } from '../../../../core/model/entities/course';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-courses-panel',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './courses-panel.component.html',
   styleUrl: './courses-panel.component.scss'
 })

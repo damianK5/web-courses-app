@@ -10,11 +10,17 @@ import { environment } from '../../../environments/environment';
 export class UserService {
 
   private apiServerUrl = environment.apiUrl;
-
   private currentUserSubject = new BehaviorSubject<User | null> (null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
+  constructor(private http: HttpClient) { 
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser)
+      this.currentUserSubject.next(JSON.parse(storedUser));
+  }
+
   setUser(user: User){
+    localStorage.setItem('currentUser', JSON.stringify(user));
     return this.currentUserSubject.next(user);
   }
   
@@ -22,6 +28,10 @@ export class UserService {
     return this.currentUserSubject.value;
   }
 
+  getId(): number | null
+{
+  return this.currentUserSubject.value?.id || null;
+}
   isTeacher():boolean{
     return this.currentUserSubject.value?.accountType==AccountType.TEACHER
   }
@@ -41,10 +51,9 @@ export class UserService {
   }
 
   clearUser(){
+    localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
-
-  constructor(private http: HttpClient) { }
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiServerUrl}/user/all`);
