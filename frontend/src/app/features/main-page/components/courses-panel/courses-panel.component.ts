@@ -21,11 +21,13 @@ onCourseClick(course: Course) {
   courseService = inject(CourseService);
   showButton = false;
   courses$ = this.courseService.currentCourses$;
+
   displayedCourses$!: Observable<Course[]>;
   
   ngOnInit(): void {
     this.displayedCourses$ = this.courses$.pipe(
       tap(courses => {
+        console.log(courses);
         this.showButton = (courses?.length ?? 0) > 3;
       }),
       map(courses => (courses ?? []).slice(0, 3))

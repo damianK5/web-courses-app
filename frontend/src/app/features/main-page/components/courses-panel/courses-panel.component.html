@@ -2,10 +2,10 @@
   <h1>Moje kursy</h1>
   <ul  *ngIf="displayedCourses$ | async as courses">
     <li *ngFor="let course of courses">
-      <h2 (click)="onCourseClick(course)" >{{ course.name }}</h2> 
+      <h2 routerLink="/course/{{course.id}}" >{{ course.name }}</h2> 
     </li>  
   </ul>
   <button *ngIf="showButton">
-    <h4 routerLink="/courses" >Zobacz wszystkie kursy!</h4>
+    <h4 routerLink="/my-courses" >Zobacz resztę!</h4>
   </button>
 </div>

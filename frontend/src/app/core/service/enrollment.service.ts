@@ -3,13 +3,14 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Enrollment } from '../model/entities/enrollment';
+import { EnrollmentDTO } from '../model/entities/enrollmentDTO';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrollmentService {
 
-    private apiServerUrl = environment.apiUrl;
+  private apiServerUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -33,9 +34,9 @@ export class EnrollmentService {
     return this.http.get<Enrollment>(`${this.apiServerUrl}/enrollment/find/${id}`);
   }
 
-  public addEnrollment(enrollment: Enrollment): Observable<Enrollment>
+  public addEnrollment(enrollment: EnrollmentDTO): Observable<EnrollmentDTO>
   {
-    return this.http.post<Enrollment>(`${this.apiServerUrl}/enrollment/add`, enrollment);
+    return this.http.post<EnrollmentDTO>(`${this.apiServerUrl}/enrollment/add`, enrollment);
   }
 
   public updateEnrollment(enrollment: Enrollment): Observable<Enrollment>

@@ -1,10 +1,8 @@
-h4 {
-        display: block;
-        cursor: pointer;
-        font-size: 20px;
-        color: blue;
-         &:hover {
-            text-decoration: underline;
-            display: inline; 
-        }
+.panel {
+  h3 {
+    transition: all 0.3s ease;
+    &:hover {
+      text-decoration: underline;
     }
+  }
+}

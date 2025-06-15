@@ -34,14 +34,18 @@ export class HomeworkService {
   }
 
   public getHomeworksByCourse(id: number): Observable<Homework[]> {
-  return this.http.get<Homework[]>(`${this.apiServerUrl}/homework/find/course/${id}`).pipe(
-    tap(homeworks => this.updateCurrentHomeworks(homeworks)),
-    catchError(error => {
-      console.error('Failed to fetch homeworks', error);
-      return throwError(() => error);
-    })
-  );
-}
+    return this.http.get<Homework[]>(`${this.apiServerUrl}/homework/find/course/${id}`).pipe(
+      tap(homeworks => this.updateCurrentHomeworks(homeworks)),
+      catchError(error => {
+        console.error('Failed to fetch homeworks', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  public clearHomeworks(){
+    this.currentHomeworkSubject.next(null);
+  }
 
   public getHomeworkById(id: number): Observable<Homework>
   {

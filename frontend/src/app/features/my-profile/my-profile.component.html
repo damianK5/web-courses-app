@@ -1,7 +1,17 @@
-<h1>{{user?.firstName}} {{user?.lastName}}</h1>
-<h2>Szczegóły</h2>
-<h3>Adres e-mail:    {{user?.email}}</h3>
-<h2>Udział w kursach:</h2>
-<li *ngFor="let course of myCourses">
-  <h2>{{course.name}}</h2>
-</li>
+<div class="panel p-6 bg-gray-100 text-center rounded-lg shadow-md">
+  <h2 class="text-xl font-semibold mb-2">{{user?.firstName}} {{user?.lastName}}</h2>
+
+  <h1 class="text-3xl font-bold mb-4">Szczegóły</h1>
+
+  <h2 class="text-lg mb-6">Adres e-mail: {{user?.email}}</h2>
+
+  <h1 class="text-3xl font-bold mb-4">Udział w kursach:</h1>
+  <ul class="mb-6 space-y-2">
+    <li *ngFor="let course of myCourses">
+      <h3 class="text-lg text-gray-700">{{course.name}}</h3>
+    </li>
+  </ul>
+
+  <h1 class="text-3xl font-bold mb-2">Akcje</h1>
+  <h3 routerLink="/change-password" class="text-blue-600 hover:underline hover:text-blue-800 cursor-pointer text-lg">Zmień hasło</h3>
+</div>

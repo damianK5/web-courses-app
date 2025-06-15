@@ -5,10 +5,11 @@ import { UserService } from '../../core/service/user.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Course } from '../../core/model/entities/course';
 import { debounce, debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-my-courses',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './my-courses.component.html',
   styleUrl: './my-courses.component.scss'
 })

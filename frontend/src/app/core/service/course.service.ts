@@ -39,6 +39,11 @@ export class CourseService {
     })
   }
 
+  clearCourses() {
+    this.currentCoursesSubject.next(null);
+    this.allCoursesSubject.next(null);
+  }
+
   constructor(private http: HttpClient) { }
 
   public getCourses(): Observable<Course[]>

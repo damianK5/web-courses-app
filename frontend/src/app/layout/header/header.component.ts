@@ -32,6 +32,6 @@ export class HeaderComponent implements OnInit{
     this.showLeftSidebar = !this.showLeftSidebar;
   }
   logout() {
-    this.authService.logout().subscribe();
+    this.authService.logout();
   }
 }

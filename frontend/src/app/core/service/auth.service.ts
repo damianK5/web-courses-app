@@ -9,6 +9,10 @@ import { DecodedToken } from '../model/token';
 import { jwtDecode } from "jwt-decode";
 import { User } from '../model/entities/user';
 import { UserService } from './user.service';
+import { ChangePasswordDTO } from '../model/entities/change-passwordDTO';
+import { EnrollmentService } from './enrollment.service';
+import { HomeworkService } from './homework.service';
+import { CourseService } from './course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +22,9 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
   userService = inject(UserService);
+  homeworkService = inject(HomeworkService);
+  courseService = inject(CourseService);
+
 
   constructor(
     private http: HttpClient,
@@ -35,6 +42,14 @@ export class AuthService {
         return response;
       }));
   }
+
+  changePassword(changePasswordDTO: ChangePasswordDTO) {
+  return this.http.post<LoginResponse>(`${this.apiServerUrl}/api/v1/auth/change-password`, changePasswordDTO)
+    .pipe(tap(response => {
+      localStorage.setItem('loggedUser', JSON.stringify(response));
+      this.currentUserSubject.next(response);
+    }));
+}
 
   getCurrentUserDetails(): Observable<User> {
     const token = this.getToken();
@@ -54,7 +69,6 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const token = this.getToken();
-    // Add token expiration
     return !!token;
   }
 
@@ -88,34 +102,21 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  logout(): Observable<void> {
+  logout(): void {
     this.currentUserSubject.next(null);
     const token = this.getToken();
     
-    // clear the token from user's browser
     this.clearAuthData();
-    if (!token) {
-      this.router.navigate(['/login']);
-      return of(undefined);
-    }
+    this.router.navigate(['/login']);
 
-    // clear the token from a backend server
-    return this.http.post<void>(`${this.apiServerUrl}/api/v1/auth/logout`, {}, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).pipe(
-      tap(() => {
-        this.router.navigate(['/login']);
-      }),
-      catchError(error => {
-        this.router.navigate(['/login']);
-        return throwError(() => error);
-      })
-    );
+    
   }
 
   private clearAuthData() {
     localStorage.removeItem('loggedUser');
+    this.userService.clearUser();
+    this.courseService.clearCourses();
+    this.homeworkService.clearHomeworks();
+    
   }
 }

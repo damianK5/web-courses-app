@@ -49,6 +49,7 @@ public class EnrollmentController {
 
     @PostMapping("/add")
     public ResponseEntity<Enrollment> addEnrollment(@RequestBody EnrollmentRequestDTO enrollment) {
+        System.out.println("################################################################");
         Enrollment newEnrollment = enrollmentService.addEnrollment(enrollment);
         return new ResponseEntity<>(newEnrollment, HttpStatus.CREATED);
     }

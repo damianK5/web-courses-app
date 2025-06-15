@@ -17,10 +17,8 @@ export class HomeworksPanelComponent implements OnInit{
   homeworksService = inject(HomeworkService);
   admissionService = inject(AdmissionService);
 
-  homeworks$ = this.homeworksService.currentHomework$.pipe(map(homeworks => (homeworks ?? []).slice().sort((a, b) => a.id - b.id)));
-  admissionHomeworkIds$ = this.admissionService.currentAdmission$.pipe(
-    map(admission => new Set(admission?.map(a=>a.homework.id)))
-  );
+  homeworks$ = this.homeworksService.currentHomework$.pipe( map(homeworks => (homeworks ?? []).slice().sort((a, b) => a.id - b.id)));
+  admissionHomeworkIds$ = this.admissionService.currentAdmission$.pipe( map(admission => new Set(admission?.map(a=>a.homework.id))));
   
   displayedHomeworks$!: Observable<Homework[]>;
   displayedAdmissions$!: Observable<Admission[]>;

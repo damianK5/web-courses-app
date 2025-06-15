@@ -31,14 +31,16 @@ export class MainPageComponent implements OnInit {
   homeworks = signal<Homework[]>([]);
 
   ngOnInit(): void {
-    const token = localStorage.getItem('currentUser');
+    const token = localStorage.getItem('loggedUser');
     if (token) {
       
       this.authService.getCurrentUserDetails().subscribe({
       next: (user) =>{
         this.courseService.getCoursesByUserId(user.id).subscribe({
           next: (courses) =>{
+            
             for (const course of courses ){
+              console.log("1");
               this.homeworkService.getHomeworksByCourse(course.id).subscribe();
               this.admissionService.getAdmissionByUserId(user.id).subscribe();
             }
@@ -59,20 +61,4 @@ export class MainPageComponent implements OnInit {
     this.roles = decoded.roles;
     }
   }
-
-  // this was for testing
-  // userService = inject(UserService);
-  // users = signal<Array<User>>([]);
-
-  // ngOnInit(): void {
-  //   this.userService.getUsers()
-  //     .pipe(
-  //       catchError(err => {
-  //         console.log(err);
-  //         throw err;
-  //       })
-  //     ).subscribe((users) => {
-  //       this.users.set(users);
-  //     });
-  // }
 }

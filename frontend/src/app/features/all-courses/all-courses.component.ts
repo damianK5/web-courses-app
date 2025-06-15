@@ -4,21 +4,25 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { Course } from '../../core/model/entities/course';
+import { UserService } from '../../core/service/user.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-all-courses',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './all-courses.component.html',
   styleUrl: './all-courses.component.scss'
 })
 export class AllCoursesComponent implements OnInit, OnDestroy {
 
   courseService = inject(CourseService);
+  userService = inject(UserService);
   searchControl = new FormControl('');
   
   allCourses: Course[] = [];
   filteredCourses: Course[] = [];
+  userCourses: Course[] = [];
   isLoading = true;
   
   private subscriptions: Subscription[] = [];
@@ -37,14 +41,20 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
       next: (courses) => {
         this.allCourses = courses;
         this.filteredCourses = courses;
-        this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
       }
     });
-    
     this.subscriptions.push(courseSub);
+    
+    let id: number | null = this.userService.getId();
+    this.courseService.getCoursesByUserId(id!).subscribe({
+      next: (course)=>{
+        this.userCourses = course;
+        this.isLoading = false;
+      },
+    });
   }
 
   private setupSearch(): void {
@@ -55,6 +65,10 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
       this.filterCourses(searchTerm || '');
     });
     this.subscriptions.push(searchSub);
+  }
+
+  isUserEnrolled(courseId: number): boolean {
+    return this.userCourses?.some(userCourse => userCourse.id === courseId);
   }
 
   private filterCourses(searchTerm: string): void {

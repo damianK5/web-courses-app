@@ -39,7 +39,7 @@ public class EnrollmentService {
             .course(course)
             .confirmed(enrollment.getConfirmed())
             .type(enrollment.getType())
-            .groupNumber(enrollment.getGroupNumber())
+            .groupNumber(1)
             .build();
 
         return enrollmentRepo.save(newEnrollment);
@@ -55,7 +55,7 @@ public class EnrollmentService {
         Enrollment existing = enrollmentRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Enrollment with user_id: " + id.getUser() + " and course_id:" +id.getCourse()+ " not found"));
         existing.setConfirmed(enrollment.getConfirmed());
         existing.setType(enrollment.getType());
-        existing.setGroupNumber(enrollment.getGroupNumber());
+        existing.setGroupNumber(1);
         return enrollmentRepo.save(existing);
     }
     public Enrollment findEnrollmentById(EnrollmentId id) {

@@ -24,6 +24,10 @@ export class AdmissionService {
     return this.currentAdmissionSubject.value?? [];
   }
 
+  clearAdmissions(){
+    this.currentAdmissionSubject.next(null);
+  }
+
   public getAdmissions(): Observable<Admission[]>
   {
     return this.http.get<Admission[]>(`${this.apiServerUrl}/admission/all`);

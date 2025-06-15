@@ -2,6 +2,7 @@ package com.example.backend.auth;
 
 import com.example.backend.config.JwtService;
 import com.example.backend.model.AccountType;
+import com.example.backend.model.ChangePasswordDTO;
 import com.example.backend.model.User;
 import com.example.backend.repo.UserRepo;
 import com.example.backend.token.Token;
@@ -75,5 +76,26 @@ public class AuthenticationService {
             token.setRevoked(true);
         });
         tokenRepo.saveAll(validUserTokens);
+    }
+
+    public AuthenticationResponse changePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = userRepo.findById(changePasswordDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+        userRepo.save(user);
+
+        // Generate and return a new token
+        String jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

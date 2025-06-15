@@ -8,5 +8,4 @@ public class EnrollmentRequestDTO {
     private Long course_id;
     private Boolean confirmed;
     private EnrollmentType type;
-    private int groupNumber;
 }
