@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { Admission } from '../model/entities/admission';
+import { AdmissionDTO } from '../model/entities/admissionDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,7 @@ export class AdmissionService {
     );
   }
   
-  public addAdmission(admission: Admission): Observable<Admission>
+  public addAdmission(admission: AdmissionDTO): Observable<Admission>
   {
     return this.http.post<Admission>(`${this.apiServerUrl}/admission/add`, admission);
   }

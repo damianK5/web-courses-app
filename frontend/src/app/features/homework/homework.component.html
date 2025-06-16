@@ -1,0 +1,38 @@
+<div class="flex flex-col space-y-4">
+  <div class="flex items-center space-x-4">
+    <label
+      for="fileInput"
+      class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+    >
+      Choose Files
+    </label>
+
+    <input
+      id="fileInput"
+      type="file"
+      multiple
+      (change)="onFileSelected($event)"
+      class="hidden"
+    />
+
+    <button
+      (click)="onUpload()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+    >
+      Upload
+    </button>
+  </div>
+
+  <ul class="text-gray-700 italic list-disc list-inside">
+    <li *ngFor="let name of fileNames">{{ name }}</li>
+  </ul>
+  <mat-form-field appearance="fill">
+    <mat-label>Wybierz datę</mat-label>
+    <input matInput readonly [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <p *ngIf="uploadSuccess === true" class="text-green-600">✅ Upload successful!</p>
+  <p *ngIf="uploadSuccess === false" class="text-red-600">❌ Upload failed.</p>
+</div>

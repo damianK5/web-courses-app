@@ -2,14 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CourseService } from '../../core/service/course.service';
 import { UserService } from '../../core/service/user.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Course } from '../../core/model/entities/course';
 import { HomeworkService } from '../../core/service/homework.service';
 import { Homework } from '../../core/model/entities/homework';
 
 @Component({
   selector: 'app-course',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './course.component.html',
   styleUrl: './course.component.scss'
 })

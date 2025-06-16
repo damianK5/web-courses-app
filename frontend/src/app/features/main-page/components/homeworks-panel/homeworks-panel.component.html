@@ -2,8 +2,7 @@
     <h1>Zadania domowe</h1>
     <ul *ngIf="displayedHomeworks$ |async as homeworks">
         <li *ngFor="let homework of homeworks" >
-            <h2 (click)="onHomeworkClick()  "
-            [ngClass]="{'submitted': (admissionHomeworkIds$ | async)?.has(homework.id),'not-submitted': !(admissionHomeworkIds$ | async)?.has(homework.id)}"
+            <h2 [routerLink]="['/homework', homework.id]" [ngClass]="{'submitted': (admissionHomeworkIds$ | async)?.has(homework.id),'not-submitted': !(admissionHomeworkIds$ | async)?.has(homework.id)}"
             [title] = " (admissionHomeworkIds$ | async)?.has(homework.id) ? 'Zadanie oddane':'Zadanie jeszcze nie zostało oddane'">{{homework.name}}</h2>
         </li>
     </ul>

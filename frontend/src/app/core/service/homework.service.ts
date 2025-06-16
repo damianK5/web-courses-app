@@ -35,7 +35,10 @@ export class HomeworkService {
 
   public getHomeworksByCourse(id: number): Observable<Homework[]> {
     return this.http.get<Homework[]>(`${this.apiServerUrl}/homework/find/course/${id}`).pipe(
-      tap(homeworks => this.updateCurrentHomeworks(homeworks)),
+      tap(homeworks => {
+        this.setHomeworks(homeworks)
+      }
+    ),
       catchError(error => {
         console.error('Failed to fetch homeworks', error);
         return throwError(() => error);

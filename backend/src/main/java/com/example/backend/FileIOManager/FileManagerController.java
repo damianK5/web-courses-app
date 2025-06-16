@@ -1,7 +1,9 @@
 package com.example.backend.FileIOManager;
 
+import com.example.backend.model.Course;
 import com.example.backend.model.Homework;
 import com.example.backend.model.User;
+import com.example.backend.service.CourseService;
 import com.example.backend.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ private final String sep = File.separator;
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CourseService courseService;
 
     //ZAPIS DO AKTUALNYCH PLIKOW I ARCHIWUM
 
@@ -71,12 +75,19 @@ private final String sep = File.separator;
     }
 
     @PostMapping("/{courseid}/{homeworkid}")
-    public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") MultipartFile file)
-    {
+    public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") List<MultipartFile> files) {
         User user = userService.findUserById(userid);
-        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
-        return uploadFile(file, path);
+        Course course = courseService.findCourseById(courseid);
+        String basePath = Paths.get(course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+
+        for (MultipartFile file : files) {
+            String filePath = Paths.get(basePath, file.getOriginalFilename()).toString();
+            boolean success = uploadFile(file, filePath);
+            if (!success) return false;
+        }
+        return true;
     }
+
 
     public boolean uploadToArchive(MultipartFile file,@PathVariable String path)
     {

@@ -9,6 +9,7 @@ import { MyCoursesComponent } from './features/my-courses/my-courses.component';
 import { CourseComponent } from './features/course/course.component';
 import { EnrollmentComponent } from './features/enrollment/enrollment.component';
 import { ChangePasswordComponent } from './features/change-password/change-password.component';
+import { HomeworkComponent } from './features/homework/homework.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuardService] },
   { path: 'course/:id', component: CourseComponent, canActivate: [AuthGuardService] },
   { path: 'enrollment/:id', component: EnrollmentComponent, canActivate: [AuthGuardService] },
-  { path: 'change-password', component:ChangePasswordComponent, canActivate: [AuthGuardService] }
+  { path: 'change-password', component:ChangePasswordComponent, canActivate: [AuthGuardService] },
+  { path: 'homework/:id', component: HomeworkComponent, canActivate: [AuthGuardService]},
 ];
 

@@ -23,7 +23,7 @@ public class Asset implements Serializable {
     private Course course;
 
     private String name;
-
+    private long relevantDate;
     private String comment;
     private String filepath;
 }

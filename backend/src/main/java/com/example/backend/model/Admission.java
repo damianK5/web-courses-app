@@ -32,6 +32,6 @@ public class Admission {
     private long admissionDate;
     private String studentComment;
     private String teacherComment;
-    private int grade;
+    private Integer grade;
 
 }

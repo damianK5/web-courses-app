@@ -7,52 +7,54 @@ import { Observable, of, switchMap } from 'rxjs';
   providedIn: 'root'
 })
 export class FileUploadService {
-private apiServerUrl = environment.apiUrl;
+  private apiServerUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  public uploadAsset(file: File, courseID: number): Observable<boolean>
+    public uploadAsset(file: File, courseID: number): Observable<boolean>
+    {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/asset`, formData).pipe
+      (
+        switchMap (success => 
+        {
+          if (success)
+          {
+            return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/asset`, formData)
+          }
+          else {return of(false)}
+        })
+      )
+    }
+
+    public uploadHomework(file:File, courseID: number): Observable<boolean>
+
   {
     const formData = new FormData();
-    formData.append('file', file);
-
-    return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/asset`, formData).pipe
-    (
-      switchMap (success => 
-      {
-        if (success)
+    formData.append('files', file);
+    return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
+      (
+        switchMap (success => 
         {
-          return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/asset`, formData)
-        }
-        else {return of(false)}
-      })
-    )
+          if (success)
+          {
+            return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/homework`, formData)
+          }
+          else {return of(false)}
+        })
+      )
   }
 
-  public uploadHomework(file:File, courseID: number): Observable<boolean>
-
-{
-  const formData = new FormData();
-  formData.append('file', file);
-  return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
-    (
-      switchMap (success => 
-      {
-        if (success)
-        {
-          return this.http.post<boolean>(`${this.apiServerUrl}/files/archive/${courseID}/homework`, formData)
-        }
-        else {return of(false)}
-      })
-    )
-}
-
-public uploadAdmission(file: File, courseID: number, userID: number, homeworkID: number): Observable<boolean>
-{
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('userid', userID.toString());
-  return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/${homeworkID}`, formData).pipe
+  public uploadAdmission(files: File[], courseID: number, userID: number, homeworkID: number): Observable<boolean>
+  {
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append('file', file);
+    }
+    formData.append('userid', userID.toString());
+    return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/${homeworkID}`, formData).pipe
     (
       switchMap (success => 
       {
@@ -63,7 +65,7 @@ public uploadAdmission(file: File, courseID: number, userID: number, homeworkID:
         else {return of(false)}
       })
     )
-}
+  }
 }
 
   

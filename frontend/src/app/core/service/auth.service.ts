@@ -13,6 +13,7 @@ import { ChangePasswordDTO } from '../model/entities/change-passwordDTO';
 import { EnrollmentService } from './enrollment.service';
 import { HomeworkService } from './homework.service';
 import { CourseService } from './course.service';
+import { AdmissionService } from './admission.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class AuthService {
   userService = inject(UserService);
   homeworkService = inject(HomeworkService);
   courseService = inject(CourseService);
+  admissionService = inject(AdmissionService);
 
 
   constructor(
@@ -117,6 +119,7 @@ export class AuthService {
     this.userService.clearUser();
     this.courseService.clearCourses();
     this.homeworkService.clearHomeworks();
+    this.admissionService.clearAdmissions();
     
   }
 }

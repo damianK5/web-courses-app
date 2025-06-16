@@ -5,10 +5,11 @@ import { map, Observable, tap } from 'rxjs';
 import { Homework } from '../../../../core/model/entities/homework';
 import { AdmissionService } from '../../../../core/service/admission.service';
 import { Admission } from '../../../../core/model/entities/admission';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-homeworks-panel',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './homeworks-panel.component.html',
   styleUrl: './homeworks-panel.component.scss'
 })
@@ -23,16 +24,9 @@ export class HomeworksPanelComponent implements OnInit{
   displayedHomeworks$!: Observable<Homework[]>;
   displayedAdmissions$!: Observable<Admission[]>;
 
-  onHomeworkClick(){
-  this.homeworks$.pipe(
-    tap(homework => console.log(homework))
-  ).subscribe();
-};
-
   ngOnInit(): void {
     this.displayedHomeworks$ = this.homeworks$.pipe(
       map(homeworks => (homeworks ?? []).slice(0, 3))
-    );
-    
+    );   
   } 
 }
