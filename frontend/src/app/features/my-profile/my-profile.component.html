@@ -1,17 +1,36 @@
-<div class="panel p-6 bg-gray-100 text-center rounded-lg shadow-md">
-  <h2 class="text-xl font-semibold mb-2">{{user?.firstName}} {{user?.lastName}}</h2>
+<div class="bg-blue-300 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-3xl">
+    <!-- Header -->
+    <div class="flex items-center mb-8">
+      <h2 class="text-4xl font-bold">Nazwa użytkownika</h2>
+    </div>
 
-  <h1 class="text-3xl font-bold mb-4">Szczegóły</h1>
+    <!-- Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- User Details & Courses -->
+      <div class="bg-gray-200 p-4 rounded-md border">
+        <h3 class="text-xl font-semibold mb-2">Szczegóły</h3>
+        <p class="mb-4">Adres e-mail: {{user?.email}}</p>
 
-  <h2 class="text-lg mb-6">Adres e-mail: {{user?.email}}</h2>
+        <h3 class="text-xl font-semibold mb-2">Udział w kursach</h3>
+        <ul class="space-y-1">
+          <li *ngFor="let course of myCourses" class="flex justify-between text-gray-800">
+            <span class="font-medium">{{course.name}}</span>
+            <span class="italic text-sm text-gray-600">Student</span>
+          </li>
+        </ul>
+      </div>
 
-  <h1 class="text-3xl font-bold mb-4">Udział w kursach:</h1>
-  <ul class="mb-6 space-y-2">
-    <li *ngFor="let course of myCourses">
-      <h3 routerLink="/course/{{course.id}}" class="text-lg text-gray-700">{{course.name}}</h3>
-    </li>
-  </ul>
-
-  <h1 class="text-3xl font-bold mb-2">Akcje</h1>
-  <h3 routerLink="/change-password" class="text-blue-600 hover:underline hover:text-blue-800 cursor-pointer text-lg">Zmień hasło</h3>
+      <!-- Actions -->
+      <div class="bg-gray-200 p-4 rounded-md border">
+        <h3 class="text-xl font-semibold mb-4">Akcje</h3>
+        <h3
+          routerLink="/change-password"
+          class="bg-gray-600 text-white px-4 py-2 rounded-md text-center cursor-pointer hover:bg-gray-700"
+        >
+          Zmień hasło
+        </h3>
+      </div>
+    </div>
+  </div>
 </div>
