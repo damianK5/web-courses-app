@@ -10,6 +10,9 @@ import { CourseComponent } from './features/course/course.component';
 import { EnrollmentComponent } from './features/enrollment/enrollment.component';
 import { ChangePasswordComponent } from './features/change-password/change-password.component';
 import { HomeworkComponent } from './features/homework/homework.component';
+import { AddHomeworkComponent } from './features/add-homework/add-homework.component';
+import { AddAssetComponent } from './features/add-asset/add-asset.component';
+import { CourseReportComponent } from './features/course-report/course-report.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -23,5 +26,9 @@ export const routes: Routes = [
   { path: 'enrollment/:id', component: EnrollmentComponent, canActivate: [AuthGuardService] },
   { path: 'change-password', component:ChangePasswordComponent, canActivate: [AuthGuardService] },
   { path: 'homework/:id', component: HomeworkComponent, canActivate: [AuthGuardService]},
+  { path: 'my-homeworks', component: HomeworkReportComponent, canActivate: [AuthGuardService]},
+  { path: 'add-homework', component: AddHomeworkComponent, canActivate: [AuthGuardService]},
+  { path: 'add-asset', component: AddAssetComponent, canActivate: [AuthGuardService] },
+  { path: 'course-report/:id', component: CourseReportComponent, canActivate: [AuthGuardService] }
 ];
 

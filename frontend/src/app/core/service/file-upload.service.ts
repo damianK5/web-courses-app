@@ -11,10 +11,12 @@ export class FileUploadService {
 
     constructor(private http: HttpClient) { }
 
-    public uploadAsset(file: File, courseID: number): Observable<boolean>
+    public uploadAsset(files: File[], courseID: number): Observable<boolean>
     {
       const formData = new FormData();
+      for (const file of files) {
       formData.append('file', file);
+    }
 
       return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/asset`, formData).pipe
       (
@@ -33,7 +35,7 @@ export class FileUploadService {
 
   {
     const formData = new FormData();
-    formData.append('files', file);
+    formData.append('file', file);
     return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
       (
         switchMap (success => 

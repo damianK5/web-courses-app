@@ -1,6 +1,10 @@
 <div *ngIf="!isLoading">
     <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{course?.name}}</h1>
-
+    <div *ngIf="isTeacher || isAdmin" class="button-group">
+        <button routerLink="/add-homework">Dodaj zadanie</button>
+        <button routerLink="/add-asset">Dodaj zasób</button>
+        <button [routerLink]="['/course-report', course!.id]">Raport dla kursu</button>
+    </div>
     <div *ngIf="homeworks&& homeworks.length > 0">
     <ul>
         <li *ngFor="let homework of homeworks">

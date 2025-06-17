@@ -17,7 +17,12 @@ export class CourseComponent implements OnInit {
   private courseService = inject(CourseService);
   private homeworkService = inject(HomeworkService);
   private route = inject(ActivatedRoute);
+  private userService = inject(UserService);
   isLoading = true;
+  
+  isStudent = this.userService.isStudent();
+  isTeacher = this.userService.isTeacher();
+  isAdmin = this.userService.isAdmin();
 
   course:Course | undefined;
   homeworks: Homework[] | undefined;

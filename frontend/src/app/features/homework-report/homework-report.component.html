@@ -1,1 +1,85 @@
-<p>homework-report works!</p>
+<div class="homework-report-container">
+  <h2 class="report-title">My Homework Report</h2>
+  
+  <div class="course-list">
+    <div *ngFor="let course of myCourses" class="course-card">
+      <div class="course-header" (click)="toggleCourse(course.id)">
+        <div class="course-info">
+          <h3 class="course-name">{{ course.name }}</h3>
+          <div class="course-stats">
+            <span class="stat-item">
+              <span class="stat-number">{{ getSubmittedCount(course.id) }}</span>
+              <span class="stat-label">/ {{ getHomeworkCount(course.id) }} submitted</span>
+            </span>
+          </div>
+        </div>
+        <div class="toggle-icon" [class.expanded]="toggleStates[course.id]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="course-content" [class.expanded]="toggleStates[course.id]" *ngIf="toggleStates[course.id]">
+        <div class="homework-list">
+          <div *ngFor="let row of getRowsPerCourse(course.id)" [routerLink]="['/homework', row.homework.id]"  class="homework-item">
+            <div class="homework-header">
+              <h4 class="homework-title">{{ row.homework.name }}</h4>
+              <div class="homework-status" [class.submitted]="row.admission" [class.pending]="!row.admission" 
+                   [class.graded]="row.admission && row.admission.grade !== null && row.admission.grade !== undefined">
+                <span class="status-dot"></span>
+                <span class="status-text">
+                  <ng-container *ngIf="!row.admission">Pending</ng-container>
+                  <ng-container *ngIf="row.admission && (row.admission.grade === null || row.admission.grade === undefined)">Submitted</ng-container>
+                  <ng-container *ngIf="row.admission && row.admission.grade !== null && row.admission.grade !== undefined">
+                    Graded ({{ row.admission.grade }}%)
+                  </ng-container>
+                </span>
+              </div>
+            </div>
+            
+            <div class="homework-details">
+              <div class="detail-row">
+                <span class="detail-label">Due Date:</span>
+                <span class="detail-value">{{ row.homework.deadline| date:'short' }}</span>
+              </div>
+              
+              <div class="detail-row" *ngIf="row.homework.description">
+                <span class="detail-label">Description:</span>
+                <span class="detail-value">{{ row.homework.description }}</span>
+              </div>
+              
+              <div class="detail-row" *ngIf="row.admission">
+                <span class="detail-label">Submitted:</span>
+                <span class="detail-value">{{ row.admission.admissionDate | date:'short' }}</span>
+              </div>
+              
+              <div class="detail-row" *ngIf="row.admission && row.admission.grade !== null && row.admission.grade !== undefined">
+                <span class="detail-label">Ocena:</span>
+                <span class="detail-value grade-value" [class.grade-excellent]="row.admission.grade >= 90" 
+                      [class.grade-good]="row.admission.grade >= 70 && row.admission.grade < 90"
+                      [class.grade-average]="row.admission.grade >= 50 && row.admission.grade < 70"
+                      [class.grade-poor]="row.admission.grade < 50">
+                  {{ row.admission.grade }}%
+                </span>
+              </div>
+              
+              <div class="detail-row" *ngIf="row.admission && (row.admission.grade === null || row.admission.grade === undefined)">
+                <span class="detail-label">Ocena:</span>
+                <span class="detail-value grade-pending">Nieocenione</span>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="getRowsPerCourse(course.id).length === 0" class="no-homework">
+            <p>No homework assignments for this course yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="myCourses.length === 0" class="no-courses">
+      <p>No courses found.</p>
+    </div>
+  </div>
+</div>

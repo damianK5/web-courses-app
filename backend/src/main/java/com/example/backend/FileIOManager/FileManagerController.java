@@ -60,10 +60,16 @@ private final String sep = File.separator;
 
 
     @PostMapping("/{courseid}/asset")
-    public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
+    public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") List<MultipartFile> files)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
-        return uploadFile(file, path);
+        Course course = courseService.findCourseById(courseid);
+        String basePath = Paths.get(course.getName(), "asset").toString();
+        for (MultipartFile file : files) {
+            String filePath = Paths.get(basePath, file.getOriginalFilename()).toString();
+            boolean result = uploadFile(file, filePath);
+            if(!result) return  false;
+        }
+        return true;
 
     }
 
@@ -102,7 +108,8 @@ private final String sep = File.separator;
     @PostMapping("/archive/{courseid}/asset")
     public boolean uploadAssetToArchive(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "asset").toString();
         return uploadToArchive(file, path);
 
     }
@@ -132,7 +139,8 @@ private final String sep = File.separator;
     @DeleteMapping("/{courseid}/asset")
     public boolean removeAssetFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "asset").toString();
         return removeFile(path, filename);
     }
 
@@ -159,7 +167,8 @@ private final String sep = File.separator;
     @DeleteMapping("/archive/{courseid}/asset")
     public boolean removeArchivedAssetFile(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "asset").toString();
         return removeArchivedFile(path, filename);
     }
 
@@ -195,7 +204,8 @@ private final String sep = File.separator;
     @GetMapping("/{courseid}/asset")
     public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "asset").toString();
         return downloadFile(filename, path);
     }
 
@@ -231,7 +241,8 @@ private final String sep = File.separator;
     @GetMapping("/archive/{courseid}/asset")
     public ResponseEntity<Resource> downloadArchivedAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
     {
-        String path = Paths.get(courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "asset").toString();
         return downloadFromArchive(filename, path);
     }
 
@@ -276,7 +287,8 @@ private final String sep = File.separator;
 
     @GetMapping("/{courseid}/asset/list")
     public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
-        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "asset").toString();
 
         return generateFileList( path);
     }
@@ -296,7 +308,8 @@ private final String sep = File.separator;
     }
     @GetMapping("/archive/{courseid}/asset/list")
     public ResponseEntity<?> listArchiveAssetFiles(@PathVariable Long courseid) {
-        String path = Paths.get(FileStorageService.ARCHIVE_DIR, courseid.toString(), "asset").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(FileStorageService.ARCHIVE_DIR, course.getName(), "asset").toString();
 
         return generateFileList( path);
     }

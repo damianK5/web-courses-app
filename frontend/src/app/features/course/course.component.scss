@@ -1,0 +1,28 @@
+button {
+  padding: 1.6rem 2.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: #667eea; /* Indigo */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-right: 0.5rem; /* space between buttons */
+  margin-bottom: 0.5rem;
+}
+
+button:hover {
+  background-color: #5a6fd8;
+  transform: translateY(-5px);
+}
+
+button:active {
+  background-color: #4c5fc7;
+  transform: translateY(0);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4);
+}
