@@ -1,38 +1,61 @@
-<div class="flex flex-col space-y-4">
-  <div class="flex items-center space-x-4">
-    <label
-      for="fileInput"
-      class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-    >
-      Choose Files
-    </label>
-
-    <input
-      id="fileInput"
-      type="file"
-      multiple
-      (change)="onFileSelected($event)"
-      class="hidden"
-    />
-
-    <button
-      (click)="onUpload()"
-      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-    >
-      Upload
-    </button>
+<div class="flex flex-col space-y-6 p-4 bg-white rounded-xl shadow-md">
+  <div *ngIf="hasAdmission; else notAdmission">
+    <div class="flex flex-col space-y-4">
+      <div class="text-sm text-gray-600 italic">
+        Maksymalny rozmiar wysyłanych plików to <span class="font-medium text-black">50 MB</span>!
+      </div>
+      <div class="flex items-center space-x-4">
+        <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+          Wybierz pliki
+        </label>
+        <input id="fileInput" type="file" multiple (change)="onFileSelected($event)" class="hidden"/>
+        <button (click)="onUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+          Upload
+        </button>
+      </div>
+      <h2 class="text-base font-medium text-gray-800">Dodane pliki:</h2>
+      <ul class="text-gray-700 space-y-2 italic list-disc list-inside pl-4">
+        <li *ngFor="let name of fileNames; let i =index" class="flex justify-between items-center border-2 border-green-500 rounded-xl p-4 bg-white shadow-sm">
+          <span>{{ name }}</span>
+          <button (click)="removeFile(i)" class="text-red-600 hover:text-red-800 text-sm font-bold ml-4">❌</button>        
+        </li>
+      </ul>
+      <h2 class="text-base font-medium text-gray-800">Wysłane pliki:</h2>
+      <ul class="text-gray-700 italic list-disc list-inside pl-4">
+        <li *ngFor="let name of addedFileNames">{{ name }}</li>
+      </ul>
+    </div>
   </div>
 
-  <ul class="text-gray-700 italic list-disc list-inside">
-    <li *ngFor="let name of fileNames">{{ name }}</li>
-  </ul>
-  <mat-form-field appearance="fill">
-    <mat-label>Wybierz datę</mat-label>
-    <input matInput readonly [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+  <ng-template #notAdmission>
+    <div class="flex flex-col space-y-4">
+      <div class="text-sm text-gray-600 italic">
+        Maksymalny rozmiar wysyłanych plików to <span class="font-medium text-black">50 MB</span>!
+      </div>
+      <div class="flex items-center space-x-4">
+        <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+          Wybierz pliki
+        </label>
+        <input id="fileInput" type="file" multiple (change)="onFileSelected($event)" class="hidden"/>
+        <button (click)="onUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+          Wrzuć zadanie
+        </button>
+      </div>
+      <h2 class="text-base font-medium text-gray-800">Dodane pliki:</h2>
+      <ul class="text-gray-700 space-y-2 italic list-disc list-inside pl-4">
+        <li *ngFor="let name of fileNames; let i =index" class="flex justify-between items-center border-2 border-green-500 rounded-xl p-4 bg-white shadow-sm">
+          <span>{{ name }}</span>
+          <button (click)="removeFile(i)" class="text-red-600 hover:text-red-800 text-sm font-bold ml-4">❌</button>        
+        </li>
+      </ul>
+    </div>
+  </ng-template>
 
-  <p *ngIf="uploadSuccess === true" class="text-green-600">✅ Upload successful!</p>
-  <p *ngIf="uploadSuccess === false" class="text-red-600">❌ Upload failed.</p>
+  <!-- Upload status -->
+  <p *ngIf="uploadSuccess === true" class="text-green-600 font-semibold">
+    ✅ Wysyłanie zakończone sukcesem!
+  </p>
+  <p *ngIf="uploadSuccess === false" class="text-red-600 font-semibold">
+    ❌ {{errorMessage}}
+  </p>
 </div>

@@ -21,8 +21,8 @@ export class AdmissionService {
       return this.currentAdmissionSubject.next(Admissions);
     }
   
-  getCurrentAdmissions(): Admission[]{
-    return this.currentAdmissionSubject.value?? [];
+  getCurrentAdmissions(): Admission[] | null{
+    return this.currentAdmissionSubject.value;
   }
 
   clearAdmissions(){

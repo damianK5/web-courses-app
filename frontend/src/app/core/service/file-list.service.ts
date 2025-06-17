@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -23,10 +23,11 @@ private apiServerUrl = environment.apiUrl;
     return this.http.get<string[]>(url);
   }
 
-  public getAdmissionFilesList(courseID: number, userID: number, homeworkID: number): Observable<string[]>
+  public getAdmissionFilesList(courseID: number, userid: number, homeworkID: number): Observable<string[]>
   {
     const url = `${this.apiServerUrl}/files/${courseID}/${homeworkID}/list`
-    return this.http.get<string[]>(url);
+    const params = new HttpParams().set('userid', userid)
+    return this.http.get<string[]>(url, {params});
   }
 
     public getArchivedAssetFilesList(courseID: number): Observable<string[]>

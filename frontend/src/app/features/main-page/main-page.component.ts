@@ -48,7 +48,6 @@ export class MainPageComponent implements OnInit {
               
               this.admissionService.getAdmissionByUserId(user.id).subscribe();
               this.homeworkService.setHomeworks(this.all_homeworks);
-              console.log(this.all_homeworks);
             },
             error: (error) => {
               console.error("Failed to load homeworks", error);

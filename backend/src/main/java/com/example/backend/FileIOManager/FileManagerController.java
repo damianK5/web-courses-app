@@ -290,7 +290,8 @@ private final String sep = File.separator;
     public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
     {
         User user = userService.findUserById(id);
-        String path = Paths.get(FileStorageService.STORAGE_DIR,courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(FileStorageService.STORAGE_DIR,course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
         return generateFileList( path);
     }
     @GetMapping("/archive/{courseid}/asset/list")
