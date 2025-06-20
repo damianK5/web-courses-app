@@ -11,13 +11,13 @@ export class FileUploadService {
 
     constructor(private http: HttpClient) { }
 
-    public uploadAsset(files: File[], courseID: number): Observable<boolean>
+    public uploadAsset(files: File[], courseID: number, assetName: string): Observable<boolean>
     {
       const formData = new FormData();
       for (const file of files) {
-      formData.append('file', file);
-    }
-
+        formData.append('file', file);
+      }
+      formData.append('assetName', assetName);
       return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/asset`, formData).pipe
       (
         switchMap (success => 
@@ -31,12 +31,12 @@ export class FileUploadService {
       )
     }
 
-    public uploadHomework(file:File, courseID: number): Observable<boolean>
-
-  {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
+    public uploadHomework(file:File, courseID: number, homeworkName: string): Observable<boolean>
+    {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('homeworkName', homeworkName);
+      return this.http.post<boolean>(`${this.apiServerUrl}/files/${courseID}/homework`, formData).pipe
       (
         switchMap (success => 
         {
@@ -47,7 +47,7 @@ export class FileUploadService {
           else {return of(false)}
         })
       )
-  }
+    }
 
   public uploadAdmission(files: File[], courseID: number, userID: number, homeworkID: number): Observable<boolean>
   {

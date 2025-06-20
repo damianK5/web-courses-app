@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Asset } from '../model/entities/asset';
+import { AssetDTO } from '../model/entities/assetDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ private apiServerUrl = environment.apiUrl;
    return this.http.get<Asset>(`${this.apiServerUrl}/asset/find/${id}`); 
   }
 
-  public addAsset(asset: Asset): Observable<Asset> {
+  public addAsset(asset: AssetDTO): Observable<Asset> {
     return this.http.post<Asset>(`${this.apiServerUrl}/asset/add`, asset);
   }
 

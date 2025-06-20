@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { Homework } from '../model/entities/homework';
+import { HomeworkDTO } from '../model/entities/homeworkDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -55,9 +56,9 @@ export class HomeworkService {
     return this.http.get<Homework>(`${this.apiServerUrl}/homework/find/${id}`);
   }
 
-  public addHomework(homework: Homework): Observable<Homework>
+  public addHomework(homework: HomeworkDTO): Observable<Homework>
   {
-    return this.http.post<Homework>(`${this.apiServerUrl}/homework/add}`, homework);
+    return this.http.post<Homework>(`${this.apiServerUrl}/homework/add`, homework);
   }
 
   public updateHomework(homework: Homework): Observable<Homework>

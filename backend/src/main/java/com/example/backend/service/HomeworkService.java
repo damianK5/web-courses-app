@@ -40,7 +40,7 @@ public class HomeworkService {
                 .description(homework.getDescription())
                 .deadline(homework.getDeadline())
                 .maxGrade(homework.getMaxGrade())
-                .requireAdmission(homework.isRequireAdmission())
+                .requireAdmission(true)
                 .filepath(homework.getFilepath())
                 .build();
         return homeworkRepo.save(newHomework);
@@ -58,7 +58,7 @@ public class HomeworkService {
         existing.setDescription(homework.getDescription());
         existing.setDeadline(homework.getDeadline());
         existing.setMaxGrade(homework.getMaxGrade());
-        existing.setRequireAdmission(homework.isRequireAdmission());
+        existing.setRequireAdmission(true);
         existing.setFilepath(homework.getFilepath());
         existing.setCourse(course);
         return homeworkRepo.save(existing);

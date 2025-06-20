@@ -9,6 +9,7 @@ public class HomeworkRequestDTO {
     private String filepath;
     private int maxGrade;
     private String name;
-    private boolean requireAdmission;
     private long course_id;
 }
+
+

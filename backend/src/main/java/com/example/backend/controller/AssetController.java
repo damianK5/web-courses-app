@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Asset;
+import com.example.backend.model.AssetDTO;
 import com.example.backend.service.AssetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class AssetController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Asset> addAsset(@RequestBody Asset asset) {
+    public ResponseEntity<Asset> addAsset(@RequestBody AssetDTO asset) {
         Asset newAsset = assetService.addAsset(asset);
         return new ResponseEntity<>(newAsset, HttpStatus.CREATED);
     }

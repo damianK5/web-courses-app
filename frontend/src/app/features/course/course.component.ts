@@ -18,6 +18,7 @@ export class CourseComponent implements OnInit {
   private homeworkService = inject(HomeworkService);
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
+  id: string = "";
   isLoading = true;
   
   isStudent = this.userService.isStudent();
@@ -33,6 +34,7 @@ export class CourseComponent implements OnInit {
 
   private loadCourse(){
     const id = this.route.snapshot.paramMap.get('id');
+    this.id=id!;
     this.courseService.getCoursesById(+id!).subscribe({
       next: (course) =>{
         this.course=course;

@@ -4,6 +4,7 @@ import com.example.backend.model.Course;
 import com.example.backend.model.Homework;
 import com.example.backend.model.User;
 import com.example.backend.service.CourseService;
+import com.example.backend.service.HomeworkService;
 import com.example.backend.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ private final String sep = File.separator;
     private UserService userService;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private HomeworkService homeworkService;
 
     //ZAPIS DO AKTUALNYCH PLIKOW I ARCHIWUM
 
@@ -60,23 +63,23 @@ private final String sep = File.separator;
 
 
     @PostMapping("/{courseid}/asset")
-    public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") List<MultipartFile> files)
+    public boolean uploadAsset(@PathVariable Long courseid, @RequestParam("file") List<MultipartFile> files,  @RequestParam("assetName") String assetName)
     {
         Course course = courseService.findCourseById(courseid);
-        String basePath = Paths.get(course.getName(), "asset").toString();
+        String basePath = Paths.get(course.getName(), "assets", assetName).toString();
         for (MultipartFile file : files) {
             String filePath = Paths.get(basePath, file.getOriginalFilename()).toString();
             boolean result = uploadFile(file, filePath);
             if(!result) return  false;
         }
         return true;
-
     }
 
     @PostMapping("/{courseid}/homework")
-    public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file)
+    public boolean uploadHomework(@PathVariable Long courseid, @RequestParam("file") MultipartFile file, @RequestParam("homeworkName") String homeworkName)
     {
-        String path = Paths.get(courseid.toString(), "homework").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "homeworks", homeworkName).toString();
         return uploadFile(file, path);
     }
 
@@ -84,7 +87,8 @@ private final String sep = File.separator;
     public boolean uploadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long userid, @RequestParam("file") List<MultipartFile> files) {
         User user = userService.findUserById(userid);
         Course course = courseService.findCourseById(courseid);
-        String basePath = Paths.get(course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        Homework homework = homeworkService.findHomeworkById(homeworkid);
+        String basePath = Paths.get(course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homework.getName()).toString();
 
         for (MultipartFile file : files) {
             String filePath = Paths.get(basePath, file.getOriginalFilename()).toString();

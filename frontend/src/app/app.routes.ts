@@ -27,8 +27,8 @@ export const routes: Routes = [
   { path: 'change-password', component:ChangePasswordComponent, canActivate: [AuthGuardService] },
   { path: 'homework/:id', component: HomeworkComponent, canActivate: [AuthGuardService]},
   { path: 'my-homeworks', component: HomeworkReportComponent, canActivate: [AuthGuardService]},
-  { path: 'add-homework', component: AddHomeworkComponent, canActivate: [AuthGuardService]},
-  { path: 'add-asset', component: AddAssetComponent, canActivate: [AuthGuardService] },
+  { path: 'course/:courseId/create-homework', component: AddHomeworkComponent, canActivate: [AuthGuardService]},
+  { path: 'course/:courseId/add-asset', component: AddAssetComponent, canActivate: [AuthGuardService]},
   { path: 'course-report/:id', component: CourseReportComponent, canActivate: [AuthGuardService] }
 ];
 
