@@ -1,10 +1,17 @@
+<div class="bg-blue-300 min-h-screen  items-center justify-center p-4">
 <link href="../../styles.scss">
-<h2 class="text-center text-5xl">
-  Welcome, {{ email() }}</h2> 
-<body style="text-align:center ">
-  <app-courses-panel></app-courses-panel>
-  <app-homeworks-panel></app-homeworks-panel>
+
+    <div class="flex items-center mb-6 m-10">
+      <h2 class="text-4xl font-bold">Witaj, {{fullname()}}</h2>
+    </div>
+
+<body>
+  <div  class = "bg-gray-200 p-4 rounded-md border grid grid-cols-1 md:grid-cols-2 gap-6 m-10 min-h-192" style="text-align:center ">
+  <app-courses-panel class = "bg-white rounded-md m-10 max-h-96"></app-courses-panel>
+  <app-homeworks-panel class = "bg-white rounded-md m-10 max-h-96"></app-homeworks-panel>
+  </div>
 </body>
+</div>
 
 
 

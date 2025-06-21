@@ -1,8 +1,12 @@
-<div class="panel">
-    <h1>Zadania domowe</h1>
+<div class="m-2">
+      <div class="flex items-center mb-8">
+    <h1 class="text-4xl font-bold">Zadania domowe</h1>
+  </div>
     <ul *ngIf="displayedHomeworks$ |async as homeworks">
         <li *ngFor="let homework of homeworks" >
-            <h2 [routerLink]="['/homework', homework.id]" [ngClass]="{'submitted': (admissionHomeworkIds$ | async)?.has(homework.id),'not-submitted': !(admissionHomeworkIds$ | async)?.has(homework.id)}"
+            <h2 class = "bg-gray-600 text-white px-4 py-2 rounded-md text-center cursor-pointer hover:bg-gray-700"
+            
+            [routerLink]="['/homework', homework.id]" [ngClass]="{'submitted': (admissionHomeworkIds$ | async)?.has(homework.id),'not-submitted': !(admissionHomeworkIds$ | async)?.has(homework.id)}"
             [title] = " (admissionHomeworkIds$ | async)?.has(homework.id) ? 'Zadanie oddane':'Zadanie jeszcze nie zostało oddane'">{{homework.name}}</h2>
         </li>
     </ul>

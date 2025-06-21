@@ -25,6 +25,7 @@ export class MainPageComponent implements OnInit {
   admissionService = inject(AdmissionService);
 
   email = signal('');
+  fullname = signal('');
   roles: string[] = [];
 
   all_homeworks : Homework[] = [];
@@ -35,6 +36,7 @@ export class MainPageComponent implements OnInit {
       
       this.authService.getCurrentUserDetails().subscribe({
       next: (user) =>{
+        this.fullname.set(user.firstName +" " + user.lastName)
         this.courseService.getCoursesByUserId(user.id).subscribe({
         next: (courses) => {
           
@@ -57,6 +59,7 @@ export class MainPageComponent implements OnInit {
         error: error => {
           console.error("Failed", error);
         }
+        
       });
       },
       error: (err) => {

@@ -1,8 +1,11 @@
-<div class="panel">
-  <h1>Moje kursy</h1>
+<div class="m-2">
+  <div class="flex items-center mb-8">
+    <h1 class="text-4xl font-bold">Moje kursy</h1>
+  </div>
+  
   <ul  *ngIf="displayedCourses$ | async as courses">
     <li *ngFor="let course of courses">
-      <h2 routerLink="/course/{{course.id}}" >{{ course.name }}</h2> 
+      <h2 class="bg-gray-600 text-white px-4 py-2 rounded-md text-center cursor-pointer hover:bg-gray-700 m-6" routerLink="/course/{{course.id}}" >{{ course.name }}</h2> 
     </li>  
   </ul>
   <button *ngIf="showButton">
