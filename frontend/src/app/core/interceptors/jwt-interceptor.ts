@@ -8,6 +8,10 @@ export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  if (req.url.includes('/register')) {
+    return next(req);
+  }
+
   const token = authService.getToken();
 
   const authReq = token 

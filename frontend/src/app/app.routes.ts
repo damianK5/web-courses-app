@@ -13,6 +13,7 @@ import { HomeworkComponent } from './features/homework/homework.component';
 import { AddHomeworkComponent } from './features/add-homework/add-homework.component';
 import { AddAssetComponent } from './features/add-asset/add-asset.component';
 import { CourseReportComponent } from './features/course-report/course-report.component';
+import { RegisterComponent } from './features/register/register.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'my-homeworks', component: HomeworkReportComponent, canActivate: [AuthGuardService]},
   { path: 'course/:courseId/create-homework', component: AddHomeworkComponent, canActivate: [AuthGuardService]},
   { path: 'course/:courseId/add-asset', component: AddAssetComponent, canActivate: [AuthGuardService]},
-  { path: 'course-report/:id', component: CourseReportComponent, canActivate: [AuthGuardService] }
+  { path: 'course-report/:id', component: CourseReportComponent, canActivate: [AuthGuardService] },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuardService] },
 ];
 
