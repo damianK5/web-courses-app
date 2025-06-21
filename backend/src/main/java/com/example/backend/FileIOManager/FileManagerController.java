@@ -292,14 +292,15 @@ private final String sep = File.separator;
     @GetMapping("/{courseid}/asset/list")
     public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
         Course course = courseService.findCourseById(courseid);
-        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "asset").toString();
+        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "assets").toString();
 
         return generateFileList( path);
     }
     @GetMapping("/{courseid}/homework/list")
     public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
     {
-        String path = Paths.get(FileStorageService.STORAGE_DIR, courseid.toString(), "homework").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "homeworks").toString();
         return generateFileList( path);
     }
     @GetMapping("/{courseid}/{homeworkid}/list")
@@ -307,7 +308,8 @@ private final String sep = File.separator;
     {
         User user = userService.findUserById(id);
         Course course = courseService.findCourseById(courseid);
-        String path = Paths.get(FileStorageService.STORAGE_DIR,course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
+        Homework homework = homeworkService.findHomeworkById(homeworkid);
+        String path = Paths.get(FileStorageService.STORAGE_DIR,course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homework.getName()).toString();
         return generateFileList( path);
     }
     @GetMapping("/archive/{courseid}/asset/list")

@@ -15,4 +15,12 @@
             display: inline; 
         }
     }
+    h4 {
+        display: block;
+        cursor: pointer;
+         &:hover{
+            text-decoration: underline;
+            display: inline; 
+         }
+    }
 }

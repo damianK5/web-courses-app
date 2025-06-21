@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomeworkDTO } from '../../core/model/entities/homeworkDTO';
 import { FileUploadService } from '../../core/service/file-upload.service';
+import { FileListService } from '../../core/service/file-list.service';
 
 @Component({
   selector: 'app-add-homework',
@@ -19,6 +20,7 @@ export class AddHomeworkComponent implements OnInit {
   homeworkService = inject(HomeworkService);
   courseService = inject(CourseService);
   fileUploadService = inject(FileUploadService);
+  fileListService = inject(FileListService)
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
