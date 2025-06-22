@@ -1,1 +1,36 @@
-<p>admin-panel works!</p>
+<div class="bg-gray-50 min-h-screen ">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Button Group -->
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex rounded-md shadow-xs" role="group">
+        <a 
+          routerLink="/admin-panel/register"
+          routerLinkActive="bg-blue-600 text-white dark:bg-blue-800"
+          class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-s-lg hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
+          Rejestracja
+        </a>
+        <a 
+          routerLink="/admin-panel/users"
+          routerLinkActive="bg-blue-600 text-white dark:bg-blue-800"
+          class="px-4 py-2 text-sm font-medium border-t border-b border-r border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
+          Użytkownicy
+        </a>
+        <a 
+          routerLink="/admin-panel/courses"
+          routerLinkActive="bg-blue-600 text-white dark:bg-blue-800"
+          class="px-4 py-2 text-sm font-medium border-t border-b border-r border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
+          Wszystkie kursy
+        </a>
+        <a 
+          routerLink="/admin-panel/tasks"
+          routerLinkActive="bg-blue-600 text-white dark:bg-blue-800"
+          class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-e-lg hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
+          Wszystkie zadania
+        </a>
+      </div>
+    </div>
+
+    <!-- Dynamic Content Area -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

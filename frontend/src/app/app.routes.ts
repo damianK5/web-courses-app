@@ -13,12 +13,14 @@ import { HomeworkComponent } from './features/homework/homework.component';
 import { AddHomeworkComponent } from './features/add-homework/add-homework.component';
 import { AddAssetComponent } from './features/add-asset/add-asset.component';
 import { CourseReportComponent } from './features/course-report/course-report.component';
-import { RegisterComponent } from './features/register/register.component';
+import { RegisterComponent } from './features/admin-panel/register/register.component';
+import { UsersComponent } from './features/admin-panel/users/users.component';
+import { CoursesComponent } from './features/admin-panel/courses/courses.component';
+import { TasksComponent } from './features/admin-panel/tasks/tasks.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: '', component: MainPageComponent, canActivate: [AuthGuardService] },
-  { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AuthGuardService] },
   { path: 'homework-report', component: HomeworkReportComponent, canActivate: [AuthGuardService] },
   { path: 'courses', component: AllCoursesComponent, canActivate: [AuthGuardService] },
   { path: 'my-courses', component: MyCoursesComponent, canActivate: [AuthGuardService] },
@@ -31,6 +33,37 @@ export const routes: Routes = [
   { path: 'course/:courseId/create-homework', component: AddHomeworkComponent, canActivate: [AuthGuardService]},
   { path: 'course/:courseId/add-asset', component: AddAssetComponent, canActivate: [AuthGuardService]},
   { path: 'course-report/:id', component: CourseReportComponent, canActivate: [AuthGuardService] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuardService] },
+  { 
+    path: 'admin-panel',
+    component: AdminPanelComponent,
+    children: [
+      { 
+        path: 'register',
+        component: RegisterComponent,
+        canActivate: [AuthGuardService] 
+      },
+      { 
+        path: 'users',
+        component: UsersComponent,
+        canActivate: [AuthGuardService] 
+      },
+      { 
+        path: 'courses',
+        component: CoursesComponent,
+        canActivate: [AuthGuardService] 
+      },
+      { 
+        path: 'tasks',
+        component: TasksComponent,
+        canActivate: [AuthGuardService] 
+      },
+      // Default route redirects to register
+      { 
+        path: '',
+        redirectTo: 'register',
+        pathMatch: 'full'
+      }
+    ]
+  }
 ];
 
