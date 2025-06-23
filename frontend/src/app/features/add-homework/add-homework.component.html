@@ -1,3 +1,4 @@
+<div class="bg-blue-300 min-h-full justify-center items-center flex flex-col">
 <form
   #taskForm="ngForm"
   (ngSubmit)="onSubmit()"
@@ -64,8 +65,10 @@
   <button
     type="submit"
     [disabled]="!taskForm.valid"
-    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+    class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
+    class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
   >
     Wyślij
   </button>
 </form>
+</div>
