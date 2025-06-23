@@ -1,6 +1,11 @@
-<div *ngIf="!isLoading">
-    <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{course?.name}}</h1>
-    <div *ngIf="isTeacher || isAdmin" class="button-group">
+<div class="bg-blue-300 min min-h-full pt-8">
+<div *ngIf="!isLoading" class="flex flex-col space-y-6 p-4 bg-white rounded-xl shadow-md m-12">
+
+        <div class="flex items-center mb-6 ">
+      <h2 class="text-4xl font-bold">{{course?.name}}</h2>
+    </div>
+
+    <div *ngIf="isTeacher || isAdmin" class="button-group" class = "justify-center items-center flex">
         <button [routerLink]="['/course', id, 'create-homework']">Dodaj zadanie</button>
         <button [routerLink]="['/course', id, 'add-asset']">Dodaj zasób</button>
         <button [routerLink]="['/course-report', course!.id]">Raport dla kursu</button>
@@ -15,4 +20,5 @@
         </li>
     </ul>
   </div>
+</div>
 </div>
