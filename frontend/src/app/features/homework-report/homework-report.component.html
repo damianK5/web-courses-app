@@ -1,6 +1,9 @@
-<div class="homework-report-container">
-  <h2 class="report-title">My Homework Report</h2>
-  
+<div class="homework-report-container bg-blue-300 min-h-full min-w-full" >
+  <div class="bg-white items-center shadow-lg rounded-lg justify-center p-4 grid grid-cols-1">
+      <div class="flex items-center mb-6 ">
+      <h2 class="text-4xl font-bold">My homework Report</h2>
+    </div>
+  <div>
   <div class="course-list">
     <div *ngFor="let course of myCourses" class="course-card">
       <div class="course-header" (click)="toggleCourse(course.id)">
@@ -82,4 +85,6 @@
       <p>No courses found.</p>
     </div>
   </div>
+  </div>
+</div>
 </div>

@@ -1,5 +1,5 @@
 <div class="bg-blue-300  min-h-screen items-center">
-  <div class = "bg-white items-center justify-center p-4 grid grid-cols-2">
+  <div class = "bg-white items-center shadow-lg justify-center p-4 grid grid-cols-2">
 
     <div class="flex items-center mb-6 ">
       <h2 class="text-4xl font-bold">Moje kursy</h2>
@@ -27,7 +27,7 @@
   <div *ngIf="filteredCourses.length > 0; else noCourses">
     <ul>
         <li *ngFor="let course of filteredCourses" class="mb-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-            <a  routerLink="/course/{{course.id}}" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <a  routerLink="/course/{{course.id}}" class="block max-w-sm p-6 bg-white border borderhttp://localhost:4200/courses-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{course.name}}</h5>
                 <p class="font-normal text-gray-700 dark:text-gray-400">{{course.description}}</p>
             </a>

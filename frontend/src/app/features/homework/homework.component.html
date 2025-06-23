@@ -1,10 +1,17 @@
-<div class="flex flex-col space-y-6 p-4 bg-white rounded-xl shadow-md">
+<div class="bg-blue-300 min-h-full pt-8">
+<div class="flex flex-col space-y-6 p-4 bg-white rounded-xl shadow-md m-12">
+
+    <div class="flex items-center mb-6 ">
+      <h2 class="text-4xl font-bold">{{homework?.name}}</h2>
+    </div>
+
+
   <div *ngIf="hasAdmission; else notAdmission">
     <div class="flex flex-col space-y-4">
       <div class="text-sm text-gray-600 italic">
         Maksymalny rozmiar wysyłanych plików to <span class="font-medium text-black">50 MB</span>!
       </div>
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-4 m-12 ">
         <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
           Wybierz pliki
         </label>
@@ -33,11 +40,11 @@
         Maksymalny rozmiar wysyłanych plików to <span class="font-medium text-black">50 MB</span>!
       </div>
       <div class="flex items-center space-x-4">
-        <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        <label for="fileInput" class="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
           Wybierz pliki
         </label>
         <input id="fileInput" type="file" multiple (change)="onFileSelected($event)" class="hidden"/>
-        <button (click)="onUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+        <button (click)="onUpload()" class="bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
           Wrzuć zadanie
         </button>
       </div>
@@ -45,7 +52,7 @@
       <ul class="text-gray-700 space-y-2 italic list-disc list-inside pl-4">
         <li *ngFor="let name of fileNames; let i =index" class="flex justify-between items-center border-2 border-green-500 rounded-xl p-4 bg-white shadow-sm">
           <span>{{ name }}</span>
-          <button (click)="removeFile(i)" class="text-red-600 hover:text-red-800 text-sm font-bold ml-4">❌</button>        
+          <button (click)="removeFile(i)" class="text-red-600 hover:text-red-800 text-sm font-bold ml-4">X</button>        
         </li>
       </ul>
     </div>
@@ -59,3 +66,5 @@
     ❌ {{errorMessage}}
   </p>
 </div>
+</div>
+
