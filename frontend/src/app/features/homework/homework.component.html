@@ -12,12 +12,12 @@
         Maksymalny rozmiar wysyłanych plików to <span class="font-medium text-black">50 MB</span>!
       </div>
       <div class="flex items-center space-x-4 m-12 ">
-        <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        <label for="fileInput" class="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
           Wybierz pliki
         </label>
         <input id="fileInput" type="file" multiple (change)="onFileSelected($event)" class="hidden"/>
-        <button (click)="onUpload()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-          Upload
+        <button (click)="onUpload()" class="bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+          Dodaj plik
         </button>
       </div>
       <h2 class="text-base font-medium text-gray-800">Dodane pliki:</h2>
