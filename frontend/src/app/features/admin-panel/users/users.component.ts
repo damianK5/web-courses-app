@@ -36,6 +36,7 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  // doesn't work properly
   deleteUser(user: User): void {
     if (!confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
       return;
