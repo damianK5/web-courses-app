@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -206,17 +207,18 @@ private final String sep = File.separator;
         }
     }
     @GetMapping("/{courseid}/asset")
-    public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    public ResponseEntity<Resource> downloadAsset(@PathVariable Long courseid, @RequestParam("filename") String filename, @RequestParam("assetName") String assetName)
     {
         Course course = courseService.findCourseById(courseid);
-        String path = Paths.get(course.getName(), "asset").toString();
+        String path = Paths.get(course.getName(), "assets", assetName).toString();
         return downloadFile(filename, path);
     }
 
     @GetMapping("/{courseid}/homework")
-    public ResponseEntity<Resource> downloadHomework(@PathVariable Long courseid, @RequestParam("filename") String filename)
+    public ResponseEntity<Resource> downloadHomework(@PathVariable Long courseid, @RequestParam("filename") String filename, @RequestParam("homeworkName") String homeworkName)
     {
-        String path = Paths.get(courseid.toString(), "homework").toString();
+        Course course = courseService.findCourseById(courseid);
+        String path = Paths.get(course.getName(), "homeworks", homeworkName).toString();
         return downloadFile(filename, path);
     }
 
@@ -297,18 +299,19 @@ private final String sep = File.separator;
     }
 
     @GetMapping("/{courseid}/asset/list")
-    public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid) {
+    public ResponseEntity<?> listAssetFiles(@PathVariable Long courseid, @RequestParam("assetName") String assetName) {
         Course course = courseService.findCourseById(courseid);
-        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "assets").toString();
+        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "assets", assetName).toString();
 
         return generateFileList( path);
     }
-    @GetMapping("/{courseid}/homework/list")
-    public ResponseEntity<?> listHomeworkFiles(@PathVariable Long courseid)
+    @GetMapping("/{homeworkID}/homework/list")
+    public ResponseEntity<?> listHomeworkFiles(@PathVariable Long homeworkID)
     {
-        Course course = courseService.findCourseById(courseid);
-        String path = Paths.get(FileStorageService.STORAGE_DIR, course.getName(), "homeworks").toString();
-        return generateFileList( path);
+        Homework homework = homeworkService.findHomeworkById(homeworkID);
+        System.out.println(homework);
+        String path = Paths.get(FileStorageService.STORAGE_DIR, homework.getCourse().getName(), "homeworks", homework.getName()).toString();
+        return generateFileList(path);
     }
     @GetMapping("/{courseid}/{homeworkid}/list")
     public ResponseEntity<?> listAdmissionFiles(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id)
@@ -317,6 +320,7 @@ private final String sep = File.separator;
         Course course = courseService.findCourseById(courseid);
         Homework homework = homeworkService.findHomeworkById(homeworkid);
         String path = Paths.get(FileStorageService.STORAGE_DIR,course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homework.getName()).toString();
+        System.out.println(path);
         return generateFileList( path);
     }
     @GetMapping("/archive/{courseid}/asset/list")

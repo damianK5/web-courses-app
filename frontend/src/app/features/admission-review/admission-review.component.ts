@@ -42,8 +42,9 @@ export class AdmissionReviewComponent implements OnInit {
         this.admission = admission;
         if (admission.grade) this.grade = admission.grade;
         if(admission.teacherComment) this.teacherComment = admission.teacherComment 
-        this.fileListService.getAdmissionFilesList(this.admission.course.id!, this.userService.getId()!,this.admission.homework.id).subscribe({
+        this.fileListService.getAdmissionFilesList(this.admission.course.id!, this.admission.user.id,this.admission.homework.id).subscribe({
           next: (nameList) => {
+            console.log(nameList);
             this.addedFileNames = nameList
           }
         })
@@ -54,7 +55,7 @@ export class AdmissionReviewComponent implements OnInit {
   downloadFile(fileName: string): void {
     let filename2 = fileName + "/" + fileName;
     this.fileDownloadService.downloadAdmission(
-      this.userService.getId()!,
+      this.admission!.user.id!,
       this.admission!.course.id!,
       this.admission!.homework.id,
       filename2
@@ -82,7 +83,7 @@ export class AdmissionReviewComponent implements OnInit {
         filepath: this.admission?.filepath,
         courseId: this.admission?.course.id!,
         homeworkId: this.admission?.homework.id!,
-        userId: this.userService.getId()!,
+        userId: this.admission?.user.id!,
         teacherComment: this.teacherComment,
         grade:this.grade
       };

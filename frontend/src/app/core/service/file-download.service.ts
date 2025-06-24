@@ -12,17 +12,17 @@ export class FileDownloadService {
 
   constructor(private http: HttpClient) { }
 
-  public downloadAsset(courseid: number, filename: string): Observable<Blob>
+  public downloadAsset(courseid: number, filename: string, assetName: string): Observable<Blob>
   {
-    const params = new HttpParams().set('filename', filename)
+    const params = new HttpParams().set('filename', filename).set('assetName', assetName);
     const url = `${this.apiServerUrl}/files/${courseid}/asset`;
 
     return this.http.get(url, {params, responseType: 'blob'});
   }
 
-  public downloadHomework(courseid:number, filename: string): Observable<Blob>
+  public downloadHomework(courseid:number, filename: string, homeworkName: string): Observable<Blob>
   {
-    const params = new HttpParams().set('filename', filename)
+    const params = new HttpParams().set('filename', filename).set('homeworkName', homeworkName)
     const url = `${this.apiServerUrl}/files/${courseid}/homework`;
 
     return this.http.get(url, {params, responseType: 'blob'})

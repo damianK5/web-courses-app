@@ -14,11 +14,11 @@
         </h3>
         <span
           class="text-sm px-3 py-1 rounded-full font-semibold"
-          [ngClass]="admission.grade != null 
+          [ngClass]="admission.grade != null  && admission.grade!=0
             ? 'bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100' 
             : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-100'"
         >
-          {{ admission.grade != null ? 'Ocenione' : 'Nieocenione' }}
+          {{ admission.grade != null && admission.grade!=0 ? 'Ocenione' : 'Nieocenione' }}
         </span>
       </div>
 

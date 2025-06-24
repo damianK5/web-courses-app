@@ -58,6 +58,8 @@ public class FileStorageService {
             throw new NullPointerException("filename is null");
         }
         Path filePath = Paths.get(dir, path, filename).normalize();
+        System.out.println(filePath);
+
         File fileToDownload = filePath.toFile();
 
         Path baseDir = Paths.get(dir).normalize().toAbsolutePath();
