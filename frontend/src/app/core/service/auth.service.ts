@@ -94,10 +94,10 @@ export class AuthService {
     if (!token) return '';
 
     const decoded = this.decodeToken(token);
-    
+
     if (!decoded.roles) return '';
-    
-    return Array.isArray(decoded.roles) 
+
+    return Array.isArray(decoded.roles)
       ? decoded.roles[0]
       : decoded.roles;
   }
@@ -141,5 +141,21 @@ export class AuthService {
     this.courseService.clearCourses();
     this.homeworkService.clearHomeworks();
     this.admissionService.clearAdmissions();
+  }
+
+  isTokenValid(token: string): boolean {
+    try {
+      const base64Url = token.split('.')[1];
+      if (!base64Url) return false;
+
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+
+      if (!payload.exp) return false;
+
+      return payload.exp > Math.floor(Date.now() / 1000);
+    } catch (e) {
+      return false;
+    }
   }
 }

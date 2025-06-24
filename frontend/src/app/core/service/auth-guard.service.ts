@@ -7,27 +7,30 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
-
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.authService.isLoggedIn()) {
-      if (state.url.includes('/admin-panel') && !this.authService.isAdmin()) {
-        this.router.navigate(['/']); // Redirect to home if not admin
-        return false;
-      }
-
-      return true;
+    const token = this.authService.getToken();
+    
+    // Check if token is invalid or expired
+    if (!token || !this.authService.isTokenValid(token)) {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      return false;
     }
 
-    // Not logged in - redirect to login page
-    this.router.navigate(['/login']);
-    return false;
+    // Ensure only admin can navigate to admin panel
+    if (state.url.includes('/admin-panel') && !this.authService.isAdmin()) {
+      this.router.navigate(['/']);
+      return false;
+    }
+
+    return true;
   }
 }
