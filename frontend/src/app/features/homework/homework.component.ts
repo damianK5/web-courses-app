@@ -15,6 +15,7 @@ import { map } from 'rxjs';
 import { FileListService } from '../../core/service/file-list.service';
 import { User } from '../../core/model/entities/user';
 import { Admission } from '../../core/model/entities/admission';
+import { FileDownloadService } from '../../core/service/file-download.service';
 
 @Component({
   selector: 'app-homework',
@@ -28,12 +29,14 @@ import { Admission } from '../../core/model/entities/admission';
  
 export class HomeworkComponent implements OnInit {
 
+
   private route = inject(ActivatedRoute);
   private homeworkService = inject(HomeworkService);
   private fileUploadService = inject(FileUploadService);
   private userService = inject(UserService);
   private admissionService = inject(AdmissionService);
   private fileListService = inject(FileListService);
+  private fileDownloadService = inject(FileDownloadService);
 
   homework: Homework | undefined;
   errorMessage: string = ""
@@ -43,6 +46,7 @@ export class HomeworkComponent implements OnInit {
   hasAdmission = false;
   user : User | undefined;
   addedFileNames: String[] = [];
+  homeworkFileNames: string[] = [];
   admissions = this.admissionService.getCurrentAdmissions();
 
   ngOnInit(): void {
@@ -61,6 +65,18 @@ export class HomeworkComponent implements OnInit {
                 })
               }
             })
+          }
+        })
+        this.fileListService.getHomeworkFilesList(homework.id).subscribe({
+          next: (list) =>{
+            this.homeworkFileNames = list
+          },
+          error: (err) => {
+            if (err.status === 404) {
+              this.homeworkFileNames = [];
+            } else {
+              console.error('Unexpected error:', err);
+            }
           }
         })
       }  
@@ -108,6 +124,29 @@ export class HomeworkComponent implements OnInit {
         this.uploadSuccess = false;
       }
     });
+  }
+
+  downloadFile(fileName: string) {
+   
+        this.fileDownloadService.downloadHomework(
+          this.homework?.course.id!,
+          fileName,
+          this.homework?.name!
+        ).subscribe({
+          next: (blob) => {
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(downloadUrl);
+          },
+          error: (err) => {
+            console.error('Download failed', err);
+          }
+        });
   }
 
   removeFile(index: number) {

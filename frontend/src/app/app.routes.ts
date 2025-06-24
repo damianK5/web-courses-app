@@ -20,6 +20,7 @@ import { TasksComponent } from './features/admin-panel/tasks/tasks.component';
 import { AdmissionsForHomeworkComponent } from './features/admissions-for-homework/admissions-for-homework.component';
 import { AdmissionReviewComponent } from './features/admission-review/admission-review.component';
 import { CreateCourseComponent } from './features/create-course/create-course.component';
+import { AssetComponent } from './features/asset/asset.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -70,6 +71,7 @@ export const routes: Routes = [
   { path: 'homework/:id/see-admissions', component:AdmissionsForHomeworkComponent, canActivate: [AuthGuardService]},
   { path: 'admission/:id', component:AdmissionReviewComponent, canActivate: [AuthGuardService]},
   { path: 'courses/create', component:CreateCourseComponent, canActivate: [AuthGuardService]},
+  { path: 'asset/:id', component:AssetComponent, canActivate: [AuthGuardService] }
 
 ];
 

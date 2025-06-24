@@ -1,0 +1,17 @@
+<div class="bg-blue-300 min-h-full pt-8">
+<div class="p-6 max-w-3xl mx-auto space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
+<div *ngIf="fileNames && fileNames.length > 0" class="bg-gradient-to-r from-gray-200 to-gray-200 border-l-4 border-blue-400 rounded-lg p-4 mb-6">
+      <div>
+        <h2 class="text-xl font-bold mb-2">Pliki:</h2>
+        <ul class="space-y-2">
+          <li *ngFor="let fileName of fileNames" class="flex items-center justify-between bg-gray-100 p-3 rounded shadow-sm hover:bg-gray-200 transition">
+            <span>{{ fileName }}</span>
+            <button class="text-blue-600 hover:underline" (click)="downloadFile(fileName)">
+              Download
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>

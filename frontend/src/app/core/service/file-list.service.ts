@@ -11,15 +11,16 @@ private apiServerUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  public getAssetFilesList(courseID: number): Observable<string[]>
+  public getAssetFilesList(courseID: number, assetName: string): Observable<string[]>
   {
+    const params = new HttpParams().set('assetName', assetName)
     const url = `${this.apiServerUrl}/files/${courseID}/asset/list`
-    return this.http.get<string[]>(url);
+    return this.http.get<string[]>(url,{params:params});
   }
 
-    public getHomeworkFilesList(courseID: number): Observable<string[]>
+    public getHomeworkFilesList(homeworkID: number): Observable<string[]>
   {
-    const url = `${this.apiServerUrl}/files/${courseID}/homework/list`
+    const url = `${this.apiServerUrl}/files/${homeworkID}/homework/list`
     return this.http.get<string[]>(url);
   }
 

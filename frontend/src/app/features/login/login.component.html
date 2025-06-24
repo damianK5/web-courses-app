@@ -1,3 +1,10 @@
+<div class="bg-blue-300 min-h-244 pt-8">
+<div class="flex flex-col space-y-6 p-4 bg-white rounded-xl shadow-md m-12 items-center">
+
+  <h1 class="text-4xl font-semibold text-gray-800 dark:text-white mb-4">
+    Logowanie
+  </h1>
+
 <div *ngIf="loginError" class="p-4 m-5 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
   <span class="font-medium">Rejestracja nie powiodła się. </span>
 </div>
@@ -19,5 +26,7 @@
         <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Hasło</label>
         <input type="password" formControlName="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
     </div>
-    <button (click)="login()" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Zaloguj</button>
+    <button (click)="login()" type="submit" class="text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Zaloguj</button>
 </form>
+</div>
+</div>
