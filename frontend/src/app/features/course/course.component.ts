@@ -8,6 +8,7 @@ import { HomeworkService } from '../../core/service/homework.service';
 import { Homework } from '../../core/model/entities/homework';
 import { Asset } from '../../core/model/entities/asset';
 import { AssetService } from '../../core/service/asset.service';
+import { AuthService } from '../../core/service/auth.service';
 
 // Interface for combined items
 interface CourseItem {
@@ -29,14 +30,14 @@ export class CourseComponent implements OnInit {
   private courseService = inject(CourseService);
   private homeworkService = inject(HomeworkService);
   private route = inject(ActivatedRoute);
-  private userService = inject(UserService);
+  private authService = inject(AuthService);
   private assetService = inject(AssetService);
   id: string = "";
   isLoading = true;
   
-  isStudent = this.userService.isStudent();
-  isTeacher = this.userService.isTeacher();
-  isAdmin = this.userService.isAdmin();
+  isStudent = this.authService.isStudent();
+  isTeacher = this.authService.isTeacher();
+  isAdmin = this.authService.isAdmin();
 
   course: Course | undefined;
   homeworks: Homework[] | undefined;

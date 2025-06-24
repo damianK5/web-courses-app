@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { Course } from '../../core/model/entities/course';
 import { UserService } from '../../core/service/user.service';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/service/auth.service';
 
 @Component({
   selector: 'app-all-courses',
@@ -18,14 +19,15 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
 
   courseService = inject(CourseService);
   userService = inject(UserService);
+  authService = inject(AuthService);
   searchControl = new FormControl('');
   
   allCourses: Course[] = [];
   filteredCourses: Course[] = [];
   userCourses: Course[] = [];
   isLoading = true;
-  isTeacher = this.userService.isTeacher();
-  isAdmin = this.userService.isAdmin();
+  isTeacher = this.authService.isTeacher();
+  isAdmin = this.authService.isAdmin();
 
   private subscriptions: Subscription[] = [];
 
