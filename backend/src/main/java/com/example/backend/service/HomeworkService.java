@@ -2,10 +2,8 @@ package com.example.backend.service;
 
 import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.model.*;
-import com.example.backend.repo.CourseRepo;
-import com.example.backend.repo.EnrollmentRepo;
-import com.example.backend.repo.HomeworkRepo;
-import com.example.backend.repo.UserRepo;
+import com.example.backend.repo.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,13 +20,21 @@ public class HomeworkService {
     private final EnrollmentRepo enrollmentRepo;
     private final EmailService emailService;
     private final CourseRepo courseRepo;
+    private final AdmissionRepo admissionRepo;
 
     @Autowired
-    public HomeworkService(HomeworkRepo homeworkRepo, EnrollmentRepo enrollmentRepo, EmailService emailService, CourseRepo courseRepo) {
+    public HomeworkService(
+            HomeworkRepo homeworkRepo,
+            EnrollmentRepo enrollmentRepo,
+            EmailService emailService,
+            CourseRepo courseRepo,
+            AdmissionRepo admissionRepo
+    ) {
         this.homeworkRepo = homeworkRepo;
         this.enrollmentRepo =  enrollmentRepo;
         this.emailService = emailService;
         this.courseRepo = courseRepo;
+        this.admissionRepo = admissionRepo;
     }
 
     public Homework addHomework(HomeworkRequestDTO homework) {
@@ -68,7 +74,10 @@ public class HomeworkService {
         return homeworkRepo.findById(id).orElse(null);
     }
 
+    @Transactional
     public void deleteHomework(Long id) {
+        admissionRepo.deleteAll(admissionRepo.getAdmissionsByHomework(id));
+
         homeworkRepo.deleteById(id);
     }
 

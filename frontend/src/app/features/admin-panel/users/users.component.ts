@@ -36,33 +36,21 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  // doesn't work properly
   deleteUser(user: User): void {
-    if (!confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
+    if (!confirm(`Czy na pewno chcesz usunąć ${user.firstName} ${user.lastName}?`)) {
       return;
     }
 
     this.isLoading = true;
 
-    this.enrollmentService.getEnrollmentsByUser(user.id).pipe(
-      switchMap(enrollments => {
-        if (!enrollments.length) {
-          return of(null);
-        }
-        return forkJoin(
-          enrollments.map(enrollment =>
-            this.enrollmentService.deleteEnrollment(enrollment.id)
-          )
-        );
-      }),
-      switchMap(() => this.userService.deleteUser(user.id)),
-      finalize(() => this.isLoading = false)
-    ).subscribe({
+    this.userService.deleteUser(user.id).subscribe({
       next: () => {
-        this.users = this.users?.filter(u => u.id !== user.id) || [];
+        this.isLoading = false;
+        this.loadUsers(); // Update UI after deletion
       },
       error: (err) => {
-        console.error('Error during deletion:', err);
+        this.isLoading = false;
+        console.error('Failed to delete user:', err);
       }
     });
   }

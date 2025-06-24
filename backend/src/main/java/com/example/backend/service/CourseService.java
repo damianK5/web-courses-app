@@ -3,8 +3,8 @@ package com.example.backend.service;
 import com.example.backend.model.Course;
 import com.example.backend.model.Enrollment;
 import com.example.backend.model.User;
-import com.example.backend.repo.CourseRepo;
-import com.example.backend.repo.EnrollmentRepo;
+import com.example.backend.repo.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +13,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
+    private final AdmissionRepo admissionRepo;
+    private final AssetRepo assetRepo;
     private final CourseRepo courseRepo;
     private final EnrollmentRepo enrollmentRepo;
+    private final HomeworkRepo homeworkRepo;
 
     @Autowired
-    public CourseService(CourseRepo courseRepo, EnrollmentRepo enrollmentRepo) {
+    public CourseService(
+            AdmissionRepo admissionRepo,
+            AssetRepo assetRepo,
+            CourseRepo courseRepo,
+            EnrollmentRepo enrollmentRepo,
+            HomeworkRepo homeworkRepo
+    ) {
+        this.admissionRepo = admissionRepo;
+        this.assetRepo = assetRepo;
         this.courseRepo = courseRepo;
         this.enrollmentRepo = enrollmentRepo;
+        this.homeworkRepo = homeworkRepo;
     }
 
     public Course addCourse(Course course) {
@@ -43,7 +55,13 @@ public class CourseService {
         return enrollments.stream().map(Enrollment::getCourse).collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteCourse(Long id) {
+        admissionRepo.deleteAll(admissionRepo.getAdmissionsByCourse(id));
+        assetRepo.deleteAll(assetRepo.getAssetsByCourse(id));
+        enrollmentRepo.deleteAll(enrollmentRepo.getEnrollmentsByCourse(id));
+        homeworkRepo.deleteAll(homeworkRepo.getHomeworksByCourse(id));
+
         courseRepo.deleteById(id);
     }
 }

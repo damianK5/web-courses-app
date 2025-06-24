@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { HomeworkService } from '../../../core/service/homework.service';
 import { Homework } from '../../../core/model/entities/homework';
@@ -6,7 +6,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -28,12 +28,27 @@ export class TasksComponent {
     ).subscribe({
       next: (homeworks) => this.homeworks = homeworks,
       error: (err) => {
-        console.error('Error loading users:', err);
+        console.error('Error loading homeworks:', err);
       }
     });
   }
 
   deleteHomework(homework: Homework) {
-    console.log(homework.id);
+    if (!confirm(`Czy na pewno chcesz usunąć ${homework.name}?`)) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.homeworkService.deleteHomework(homework.id).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.loadHomeworks(); // Update UI after deletion
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Failed to delete homework:', err);
+      }
+    });
   }
 }

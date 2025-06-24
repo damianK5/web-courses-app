@@ -28,12 +28,27 @@ export class CoursesComponent implements OnInit {
     ).subscribe({
       next: (courses) => this.courses = courses,
       error: (err) => {
-        console.error('Error loading users:', err);
+        console.error('Error loading courses:', err);
       }
     });
   }
 
   deleteCourse(course: Course) {
-    console.log(course.id);
+    if (!confirm(`Czy na pewno chcesz usunąć ${course.name}?`)) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.courseService.deleteCourse(course.id!).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.loadCourses(); // Update UI after deletion
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Failed to delete course:', err);
+      }
+    });
   }
 }
