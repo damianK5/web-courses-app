@@ -16,8 +16,10 @@
         <ul class="space-y-1">
           <li *ngFor="let course of myCourses" class="flex justify-between text-gray-800">
             <span class="font-medium">{{course.name}}</span>
-            <span class="italic text-sm text-gray-600">Student</span>
           </li>
+            <span *ngIf="authService.isAdmin()" class="italic text-sm text-gray-600">Admin </span>
+            <span *ngIf="authService.isTeacher()" class="italic text-sm text-gray-600">Nauczyciel </span>
+            <span *ngIf="authService.isStudent()" class="italic text-sm text-gray-600">Student </span>
         </ul>
       </div>
 

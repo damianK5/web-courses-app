@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -8,9 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -34,6 +33,11 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        if (userDetails instanceof User user) {
+            if (!extraClaims.containsKey("roles")) {
+                extraClaims.put("roles", user.getAccountType());
+            }
+        }
         return Jwts
                 .builder()
                 .claims(extraClaims)

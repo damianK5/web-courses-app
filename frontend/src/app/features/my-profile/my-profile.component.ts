@@ -5,6 +5,7 @@ import { Course } from '../../core/model/entities/course';
 import { User } from '../../core/model/entities/user';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/service/auth.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -16,6 +17,7 @@ export class MyProfileComponent implements OnInit{
   
   courseService = inject(CourseService);
   userService = inject(UserService);
+  authService = inject(AuthService);
   myCourses: Course[] = [];
 
   user = this.userService.getUser();
