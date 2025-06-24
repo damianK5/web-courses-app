@@ -26,6 +26,7 @@ export class CreateCourseComponent implements OnInit{
   name: string = "";
   password: string = "";
   users: User[] = [];
+  teacherId: string = "";
 
   onSubmit() {
     const course: Course = {
@@ -35,6 +36,16 @@ export class CreateCourseComponent implements OnInit{
     }
     this.courseService.addCourse(course).subscribe({
       next: (course) => {
+        if(this.teacherId){
+          const enrollmentDTO2:EnrollmentDTO = {
+          user_id: +this.teacherId!,
+          course_id:course.id!,
+           confirmed:true,
+          type:EnrollmentType.TEACHER
+        }
+        this.enrollmentService.addEnrollment(enrollmentDTO2).subscribe()
+        }
+        
         const enrollmentDTO: EnrollmentDTO = {
           user_id: this.userService.getId()!,
           course_id: course.id!,
@@ -50,7 +61,7 @@ export class CreateCourseComponent implements OnInit{
   ngOnInit(): void {
     this.userService.getUsers().subscribe({
       next: (users) => {
-        this.users = users.filter(user=> user.accountType==AccountType.TEACHER)
+        this.users = users.filter(user=> user.accountType==AccountType.TEACHER && user.id != this.userService.getId())
         console.log(this.users);
       }
     })

@@ -96,4 +96,13 @@ export class AdmissionReviewComponent implements OnInit {
         }
       });
   }
+  validateGrade() {
+  const max = this.admission?.homework?.maxGrade || 0;
+  if (this.grade! > max) {
+    this.grade = max;
+  }
+  if (this.grade! < 0) {
+    this.grade = 0;
+  }
+}
 }
