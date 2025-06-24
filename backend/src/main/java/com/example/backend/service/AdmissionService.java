@@ -50,8 +50,8 @@ public class AdmissionService {
 
     public List<Admission> findAdmissionsByHomework(long id) {return admissionRepo.getAdmissionsByHomework(id);}
     public List<Admission> findAdmissionsByUser(long id) {return  admissionRepo.getAdmissionsByUser(id);}
-        public Admission updateAdmission(AdmissionRequestDTO admission) {
-        Admission existing = admissionRepo.findById(admission.getId()).orElseThrow(() -> new ResourceNotFoundException("Homework with id: " + admission.getId() + " not found"));
+    public Admission updateAdmission(AdmissionRequestDTO admission) {
+        Admission existing = admissionRepo.findById(admission.getId()).orElseThrow(() -> new ResourceNotFoundException("Admission with id: " + admission.getId() + " not found"));
 
         Course course = courseRepo.findById(admission.getCourseId()).orElseThrow(()->new ResourceNotFoundException("User with id: " +admission.getCourseId() + " not found"));;;
         Homework homework = homeworkRepo.findById(admission.getHomeworkId()).orElseThrow(()->new ResourceNotFoundException("User with id: " +admission.getHomeworkId() + " not found"));

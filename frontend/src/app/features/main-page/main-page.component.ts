@@ -41,7 +41,7 @@ export class MainPageComponent implements OnInit {
         next: (courses) => {
           
           const homeworkRequests = courses.map(course => 
-            this.homeworkService.getHomeworksByCourse(course.id)
+            this.homeworkService.getHomeworksByCourse(course.id!)
           );
           
           forkJoin(homeworkRequests).subscribe({

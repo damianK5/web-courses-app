@@ -60,7 +60,6 @@ public class FileStorageService {
         Path filePath = Paths.get(dir, path, filename).normalize();
         File fileToDownload = filePath.toFile();
 
-
         Path baseDir = Paths.get(dir).normalize().toAbsolutePath();
         Path resolvedFilePath = baseDir.resolve(path).resolve(filename).normalize();
 

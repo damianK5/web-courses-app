@@ -56,7 +56,7 @@ export class HomeworkComponent implements OnInit {
             admissions.forEach(admission=>{
               if (admission.homework.id===homework.id){
                 this.hasAdmission = true;
-                this.fileListService.getAdmissionFilesList(homework.course.id, this.user!.id, homework.id ).subscribe({
+                this.fileListService.getAdmissionFilesList(homework.course.id!, this.user!.id, homework.id ).subscribe({
                   next: (list) => this.addedFileNames=list
                 })
               }
@@ -84,7 +84,7 @@ export class HomeworkComponent implements OnInit {
       this.uploadSuccess = false;
       return;
     }
-    this.fileUploadService.uploadAdmission( this.selectedFiles,this.homework.course.id,this.user!.id, this.homework.id).subscribe({
+    this.fileUploadService.uploadAdmission( this.selectedFiles,this.homework.course.id!,this.user!.id, this.homework.id).subscribe({
       next: success => {
         this.uploadSuccess=true;
         this.hasAdmission = true;
@@ -95,8 +95,9 @@ export class HomeworkComponent implements OnInit {
           homeworkId: this.homework?.id!,
           userId: this.user!.id
         };
-        this.admissionService.addAdmission(admissionDTO).subscribe();
-        this.fileListService.getAdmissionFilesList(this.homework!.course.id, this.user!.id, this.homework!.id ).subscribe({
+        if (this.addedFileNames.length==0)
+          this.admissionService.addAdmission(admissionDTO).subscribe();
+        this.fileListService.getAdmissionFilesList(this.homework!.course.id!, this.user!.id, this.homework!.id ).subscribe({
           next: (list) => this.addedFileNames=list
         })
         this.fileNames = [];

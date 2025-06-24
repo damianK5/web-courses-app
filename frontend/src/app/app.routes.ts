@@ -17,11 +17,13 @@ import { RegisterComponent } from './features/admin-panel/register/register.comp
 import { UsersComponent } from './features/admin-panel/users/users.component';
 import { CoursesComponent } from './features/admin-panel/courses/courses.component';
 import { TasksComponent } from './features/admin-panel/tasks/tasks.component';
+import { AdmissionsForHomeworkComponent } from './features/admissions-for-homework/admissions-for-homework.component';
+import { AdmissionReviewComponent } from './features/admission-review/admission-review.component';
+import { CreateCourseComponent } from './features/create-course/create-course.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: '', component: MainPageComponent, canActivate: [AuthGuardService] },
-  { path: 'homework-report', component: HomeworkReportComponent, canActivate: [AuthGuardService] },
   { path: 'courses', component: AllCoursesComponent, canActivate: [AuthGuardService] },
   { path: 'my-courses', component: MyCoursesComponent, canActivate: [AuthGuardService] },
   { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuardService] },
@@ -64,6 +66,10 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ]
-  }
+  },
+  { path: 'homework/:id/see-admissions', component:AdmissionsForHomeworkComponent, canActivate: [AuthGuardService]},
+  { path: 'admission/:id', component:AdmissionReviewComponent, canActivate: [AuthGuardService]},
+  { path: 'courses/create', component:CreateCourseComponent, canActivate: [AuthGuardService]},
+
 ];
 

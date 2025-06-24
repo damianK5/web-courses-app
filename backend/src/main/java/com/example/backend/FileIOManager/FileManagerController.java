@@ -222,11 +222,17 @@ private final String sep = File.separator;
 
 
     @GetMapping("/{courseid}/{homeworkid}")
-    public ResponseEntity<Resource> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)
+    public ResponseEntity<?> downloadAdmission(@PathVariable Long courseid, @PathVariable Long homeworkid, @RequestParam("userid") Long id, @RequestParam("filename") String filename)
     {
+
         User user = userService.findUserById(id);
-        String path = Paths.get(courseid.toString(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homeworkid.toString()).toString();
-        return downloadFile(filename, path);
+        Course course = courseService.findCourseById(courseid);
+        Homework homework = homeworkService.findHomeworkById(homeworkid);
+
+
+       String path = Paths.get(course.getName(), user.getFirstName() + "_" + user.getLastName() + "_" + user.getId(), homework.getName()).toString();
+
+       return downloadFile(filename, path);
     }
 
     public ResponseEntity<Resource> downloadFromArchive(@PathVariable String path, @PathVariable String filename){
@@ -280,6 +286,7 @@ private final String sep = File.separator;
             List<String> files = StreamSupport.stream(stream.spliterator(), false)
                     .map(Path::getFileName)
                     .map(Path::toString)
+                    .filter(filename -> !filename.equals(".DS_Store"))
                     .toList();
 
             return ResponseEntity.ok(files);

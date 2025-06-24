@@ -43,7 +43,7 @@ export class HomeworkReportComponent implements OnInit {
       next: (courses) => {
         this.myCourses = courses;
         const homeworkRequests = courses.map(course => 
-          this.homeworkService.getHomeworksByCourse(course.id)
+          this.homeworkService.getHomeworksByCourse(course.id!)
         );
         forkJoin(homeworkRequests).subscribe({
           next: (allHomeworkArrays) => {
@@ -51,7 +51,7 @@ export class HomeworkReportComponent implements OnInit {
             for (const homework of this.myHomeworks){
               const admission = this.myAdmissions.find(a=>a.homework.id===homework.id);
               this.rows.push({
-                courseID: homework.course.id,
+                courseID: homework.course.id!,
                 homework: homework,
                 admission: admission ?? null
               });

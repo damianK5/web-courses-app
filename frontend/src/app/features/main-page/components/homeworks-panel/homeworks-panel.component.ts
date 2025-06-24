@@ -6,6 +6,7 @@ import { Homework } from '../../../../core/model/entities/homework';
 import { AdmissionService } from '../../../../core/service/admission.service';
 import { Admission } from '../../../../core/model/entities/admission';
 import { RouterModule } from '@angular/router';
+import { UserService } from '../../../../core/service/user.service';
 
 @Component({
   selector: 'app-homeworks-panel',
@@ -17,12 +18,14 @@ export class HomeworksPanelComponent implements OnInit{
 
   homeworksService = inject(HomeworkService);
   admissionService = inject(AdmissionService);
+  userService = inject(UserService);
 
   homeworks$ = this.homeworksService.currentHomework$.pipe( map(homeworks => (homeworks ?? []).slice().sort((a, b) => a.deadline - b.deadline)));
   admissionHomeworkIds$ = this.admissionService.currentAdmission$.pipe( map(admission => new Set(admission?.map(a=>a.homework.id))));
   
   displayedHomeworks$!: Observable<Homework[]>;
   displayedAdmissions$!: Observable<Admission[]>;
+  isStudent= this.userService.isStudent();
 
   ngOnInit(): void {
     const timestamp = Date.now();

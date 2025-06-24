@@ -1,6 +1,6 @@
 export type Course =
 {
-    id: number,
+    id?: number,
     name: string,
     description: string,
     password?: string

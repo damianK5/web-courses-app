@@ -1,0 +1,54 @@
+<div class="p-6 max-w-3xl mx-auto space-y-6">
+
+  <!-- Admissions File List -->
+  <div>
+    <h2 class="text-xl font-bold mb-2">Uploaded Admission Files</h2>
+    <ul class="space-y-2">
+      <li *ngFor="let fileName of addedFileNames" class="flex items-center justify-between bg-gray-100 p-3 rounded shadow-sm hover:bg-gray-200 transition">
+        <span>{{ fileName }}</span>
+        <button 
+          class="text-blue-600 hover:underline"
+          (click)="downloadFile(fileName)"
+        >
+          Download
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Grade & Comment Section -->
+  <form (ngSubmit)="onSubmit()" class="space-y-4">
+
+    <div>
+      <label class="block font-medium mb-1">Teacher Comment</label>
+      <textarea 
+        [(ngModel)]="teacherComment"
+        name="teacherComment"
+        rows="3"
+        class="w-full p-2 border border-gray-300 rounded"
+        placeholder="Add a comment about the submission..."
+      ></textarea>
+    </div>
+
+    <div>
+      <label class="block font-medium mb-1">Grade (Max: {{ admission?.homework?.maxGrade }})</label>
+      <input 
+        type="number" 
+        [(ngModel)]="grade"
+        name="grade"
+        required="true"
+        class="w-full p-2 border border-gray-300 rounded"
+        [max]="admission?.homework?.maxGrade!"
+        min="0"
+      />
+    </div>
+
+    <button 
+      type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+    >
+      Submit Review
+    </button>
+  </form>
+
+</div>

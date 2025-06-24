@@ -22,7 +22,6 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         emailService.sendSimpleEmail(request.getEmail(), "Rejestracja nowego użytkownika", "Witaj " + request.getFirstname() + " " + request.getLastname() + ". \nWysyłamy tę wiadomość żeby poinformować Cię, że rejestracja przebiegła pomyślnie. Życzymy owocnej nauki na naszej platformie\nPozdrawiamy,\nZespół FreeCourses");
-        System.out.println(request.getFirstname());
         return ResponseEntity.ok(service.register(request));
     }
 

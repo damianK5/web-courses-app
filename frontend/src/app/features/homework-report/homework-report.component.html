@@ -6,26 +6,26 @@
   <div>
   <div class="course-list">
     <div *ngFor="let course of myCourses" class="course-card">
-      <div class="course-header" (click)="toggleCourse(course.id)">
+      <div class="course-header" (click)="toggleCourse(course.id!)">
         <div class="course-info">
           <h3 class="course-name">{{ course.name }}</h3>
           <div class="course-stats">
             <span class="stat-item">
-              <span class="stat-number">{{ getSubmittedCount(course.id) }}</span>
-              <span class="stat-label">/ {{ getHomeworkCount(course.id) }} submitted</span>
+              <span class="stat-number">{{ getSubmittedCount(course.id!) }}</span>
+              <span class="stat-label">/ {{ getHomeworkCount(course.id!) }} submitted</span>
             </span>
           </div>
         </div>
-        <div class="toggle-icon" [class.expanded]="toggleStates[course.id]">
+        <div class="toggle-icon" [class.expanded]="toggleStates[course.id!]">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 18l6-6-6-6"/>
           </svg>
         </div>
       </div>
 
-      <div class="course-content" [class.expanded]="toggleStates[course.id]" *ngIf="toggleStates[course.id]">
+      <div class="course-content" [class.expanded]="toggleStates[course.id!]" *ngIf="toggleStates[course.id!]">
         <div class="homework-list">
-          <div *ngFor="let row of getRowsPerCourse(course.id)" [routerLink]="['/homework', row.homework.id]"  class="homework-item">
+          <div *ngFor="let row of getRowsPerCourse(course.id!)" [routerLink]="['/homework', row.homework.id]"  class="homework-item">
             <div class="homework-header">
               <h4 class="homework-title">{{ row.homework.name }}</h4>
               <div class="homework-status" [class.submitted]="row.admission" [class.pending]="!row.admission" 
@@ -74,7 +74,7 @@
             </div>
           </div>
           
-          <div *ngIf="getRowsPerCourse(course.id).length === 0" class="no-homework">
+          <div *ngIf="getRowsPerCourse(course.id!).length === 0" class="no-homework">
             <p>No homework assignments for this course yet.</p>
           </div>
         </div>

@@ -7,7 +7,7 @@ import lombok.Data;
 public class AssetDTO {
     private long id;
     private String name;
-    private long relevantDate;
+    private long relevant_date;
     private String comment;
     private String filepath;
     private Long course_id;

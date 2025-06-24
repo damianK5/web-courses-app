@@ -9,6 +9,7 @@ import com.example.backend.repo.CourseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.List;
 
 @Service
@@ -24,13 +25,13 @@ public class AssetService {
 
     public Asset addAsset(AssetDTO asset) {
         Course course = courseRepo.findById(asset.getCourse_id()).orElseThrow(()->new ResourceNotFoundException("Course with id: "+asset.getCourse_id()+ " not found"));
-
+        System.out.println(asset);
         Asset asset1 = Asset.builder()
                 .course(course)
                 .name(asset.getName())
                 .comment(asset.getComment())
                 .filepath(asset.getFilepath())
-                .relevantDate(asset.getRelevantDate())
+                .relevantDate(asset.getRelevant_date())
                 .build();
 
         return assetRepo.save(asset1);

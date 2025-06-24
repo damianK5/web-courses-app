@@ -24,7 +24,9 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
   filteredCourses: Course[] = [];
   userCourses: Course[] = [];
   isLoading = true;
-  
+  isTeacher = this.userService.isTeacher();
+  isAdmin = this.userService.isAdmin();
+
   private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {

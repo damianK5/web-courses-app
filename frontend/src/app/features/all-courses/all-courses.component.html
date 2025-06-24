@@ -18,6 +18,14 @@
 </div>
 
 <div class="bg-white m-12 rounded-xl shadow-lg border grid grid-cols-1">
+  <div class="flex justify-end px-6 pt-4" *ngIf="isTeacher || isAdmin ">
+  <a
+    routerLink="/courses/create"
+    class="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+  >
+    Dodaj kurs
+  </a>
+</div>
 
 <div *ngIf="isLoading" class="text-center py-4">
   <p>ładowanie</p>
@@ -27,7 +35,7 @@
   <div *ngIf="filteredCourses.length > 0; else noCourses">
     <ul>
       <li *ngFor="let course of filteredCourses" class="mb-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-        <a [routerLink]="isUserEnrolled(course.id) ? ['/course', course.id] : ['/enrollment', course.id]" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <a [routerLink]="isUserEnrolled(course.id!) ? ['/course', course.id] : (isTeacher ? ['/courses'] : ['/enrollment', course.id])" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{course.name}}</h5>
           <p class="font-normal text-gray-700 dark:text-gray-400">{{course.description}}</p>
        </a>

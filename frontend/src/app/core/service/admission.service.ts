@@ -60,7 +60,7 @@ export class AdmissionService {
     return this.http.post<Admission>(`${this.apiServerUrl}/admission/add`, admission);
   }
 
-  public updateAdmission(admission: Admission): Observable<Admission>
+  public updateAdmission(admission: AdmissionDTO): Observable<Admission>
   {
     return this.http.put<Admission>(`${this.apiServerUrl}/admission/update`, admission);
   }

@@ -1,0 +1,27 @@
+<div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md">
+  <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4" *ngIf="homework">
+    {{ homework!.name }}
+  </h2>
+
+  <ul class="space-y-4">
+    <li
+      *ngFor="let admission of admissions"
+      class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+
+      <div [routerLink]="['/admission', admission.id]" class="flex justify-between items-center">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white cursor-pointer hover:underline">
+          {{ admission.user.firstName }}
+        </h3>
+        <span
+          class="text-sm px-3 py-1 rounded-full font-semibold"
+          [ngClass]="admission.grade != null 
+            ? 'bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100' 
+            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-100'"
+        >
+          {{ admission.grade != null ? 'Ocenione' : 'Nieocenione' }}
+        </span>
+      </div>
+
+    </li>
+  </ul>
+</div>
