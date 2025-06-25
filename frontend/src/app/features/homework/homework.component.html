@@ -7,7 +7,7 @@
 
     <div *ngIf="homeworkFileNames && homeworkFileNames.length > 0" class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-lg p-4 mb-6">
       <div>
-        <h2 class="text-xl font-bold mb-2">Pliki z rozwiązaniami ucznia:</h2>
+        <h2 class="text-xl font-bold mb-2">Załączone pliki:</h2>
         <ul class="space-y-2">
           <li *ngFor="let fileName of homeworkFileNames" class="flex items-center justify-between bg-gray-100 p-3 rounded shadow-sm hover:bg-gray-200 transition">
             <span>{{ fileName }}</span>
