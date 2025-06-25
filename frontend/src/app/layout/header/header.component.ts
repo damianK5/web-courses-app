@@ -15,11 +15,10 @@ export class HeaderComponent implements OnInit{
   
   showLeftSidebar = false;
   authService = inject(AuthService);
-  userService = inject(UserService);
 
-  isStudent = this.userService.isStudent();
-  isTeacher = this.userService.isTeacher();
-  isAdmin = this.userService.isAdmin();
+  isStudent = this.authService.isStudent();
+  isTeacher = this.authService.isTeacher();
+  isAdmin = this.authService.isAdmin();
   isLoggedIn = false;
 
   ngOnInit(): void {
