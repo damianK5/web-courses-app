@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application.properties
+# env file (usernames, passwords)
+.env
 
 #uploaded files
 /storage
